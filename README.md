@@ -1,2 +1,87 @@
 # unchecked
-Evade Java's checked exceptions mafia.
+
+Evade the Java checked exception mafia.
+
+`unchecked` provides wrapper functions to bypass checked exception handling in
+your functions, and a utility method to rethrow checked exceptions as unchecked
+exceptions from your procedural code.
+
+## Examples
+
+Before (exceptions handled inside the lambda):
+
+    List.of("LICENSE", "README.md", "unchecked.java").stream().map(file -> {
+        try {
+            return(file + ": " + Files.lines(Paths.get(file)).count());
+        } catch (IOException e) {
+            return(file + ": " + e.getMessage()); // java made me do it
+        }
+    }).toList();
+
+After (exceptions handled outside the lambda):
+
+    List.of("LICENSE", "README.md", "unchecked.java").stream().map(unchecked(file -> 
+        file + ": " + Files.lines(Paths.get(file)).count())).toList();
+
+Using shorthand `uc` instead of `unchecked`:
+
+    List.of("LICENSE", "README.md", "unchecked.java").stream().map(uc(file -> 
+        file + ": " + Files.lines(Paths.get(file)).count())).toList();
+
+Note, consumer functions must use `uncheckedconsumer` or `ucc`:
+
+    List.of("LICENSE", "README.md", "unchecked.java").forEach(uncheckedconsumer(file -> 
+        System.out.println(file + ": " + Files.lines(Paths.get(file)).count())));
+
+    List.of("LICENSE", "README.md", "unchecked.java").forEach(ucc(file -> 
+        System.out.println(file + ": " + Files.lines(Paths.get(file)).count())));
+
+## Installation
+
+`unchecked` is a single java source file that you can drop into your project,
+or install as a jar on your classpath.
+
+Copy the java source to your project:
+
+    cd project/src
+    wget https://github.com/rogerkeays/unchecked/raw/main/unchecked.java
+
+Or build as a jar:
+
+    git clone https://github.com/rogerkeays/unchecked
+    cd unchecked
+    javac unchecked.java
+    jar --create --file unchecked.jar *.class
+
+Install the jar in your maven repo:
+
+    mvn install:install-file -Dfile=unchecked.jar -DartifactId=unchecked -DgroupId=unchecked -Dverion=0.9.0 -Dpackaging=jar
+
+Add to your maven projects using:
+
+    <dependency>
+      <groupId>unchecked</groupId>
+      <artifactId>unchecked</artifactId>
+      <version>0.9</version>
+    </dependency>
+
+Import to use in your code:
+
+    import static unchecked.*;
+
+## Testing
+
+    ./unchecked.java
+
+No output means the tests ran successfully. If you want to run the tests from
+your own build system, make sure assertions are enabled with the `java -ea`
+switch.
+
+## Related Resources
+
+ - [Lombok @SneakyThrows][1]
+ - For more solutions looking for a problem, visit [the authors homepage][2]
+
+[1]: https://projectlombok.org/features/SneakyThrows
+[2]: https://rogerkeays.com
+
