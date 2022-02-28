@@ -51,11 +51,11 @@ Or build as a jar:
     git clone https://github.com/rogerkeays/unchecked
     cd unchecked
     javac unchecked.java
-    jar --create --file unchecked.jar *.class
+    jar cf unchecked.jar *.class
 
 Install the jar in your maven repo:
 
-    mvn install:install-file -Dfile=unchecked.jar -DartifactId=unchecked -DgroupId=unchecked -Dverion=0.9.0 -Dpackaging=jar
+    mvn install:install-file -Dfile=unchecked.jar -DartifactId=unchecked -DgroupId=unchecked -Dversion=0.9.0 -Dpackaging=jar
 
 Add to your maven projects using:
 
