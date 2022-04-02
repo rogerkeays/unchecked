@@ -24,6 +24,8 @@
  * SOFTWARE.
  */
 
+package unchecked;
+
 import java.util.function.*;
 import java.util.concurrent.Callable;
 

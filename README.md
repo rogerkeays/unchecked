@@ -43,19 +43,14 @@ or install as a jar on your classpath.
 
 Copy the java source to your project:
 
-    cd project/src
+    mkdir src/unchecked && cd src/unchecked
     wget https://github.com/rogerkeays/unchecked/raw/main/unchecked.java
 
-Or build as a jar:
+Or build as a jar (installs to your maven repo if the `mvn` command is found):
 
     git clone https://github.com/rogerkeays/unchecked
     cd unchecked
-    javac unchecked.java
-    jar cf unchecked.jar *.class
-
-Install the jar in your maven repo:
-
-    mvn install:install-file -Dfile=unchecked.jar -DartifactId=unchecked -DgroupId=unchecked -Dversion=0.9.0 -Dpackaging=jar
+    ./make
 
 Add to your maven projects using:
 
@@ -67,15 +62,13 @@ Add to your maven projects using:
 
 Import to use in your code:
 
-    import static unchecked.*;
+    import static unchecked.unchecked.*;
 
 ## Testing
 
-    ./unchecked.java
-
-No output means the tests ran successfully. If you want to run the tests from
-your own build system, make sure assertions are enabled with the `java -ea`
-switch.
+Tests are run by the `make` script. No output means the tests ran successfully.
+If you want to run the tests from your own build system, make sure assertions
+are enabled with the `java -ea` switch.
 
 ## Related Resources
 
