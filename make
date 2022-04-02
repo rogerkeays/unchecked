@@ -12,6 +12,6 @@ jar --create --file target/unchecked-$VERSION.jar -C target jamaica
 java -cp target/unchecked-$VERSION.jar jamaica.unchecked
 
 # install to maven repo if mvn command available
-command mvn && \
+command -v mvn && \
 mvn install:install-file -Dfile=target/unchecked-$VERSION.jar -DgroupId=jamaica -DartifactId=unchecked -Dversion=$VERSION -Dpackaging=jar
 
