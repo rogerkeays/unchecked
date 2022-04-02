@@ -8,7 +8,7 @@ exceptions from your procedural code.
 
 ## Examples
 
-Before (exceptions handled inside the lambda):
+Before (exceptions must be handled inside the lambda):
 
     List.of("LICENSE", "README.md", "unchecked.java").stream().map(file -> {
         try {
@@ -18,12 +18,12 @@ Before (exceptions handled inside the lambda):
         }
     }).toList();
 
-After (exceptions handled outside the lambda):
+After (exceptions can now be handled outside the lambda):
 
     List.of("LICENSE", "README.md", "unchecked.java").stream().map(unchecked(file -> 
         file + ": " + Files.lines(Paths.get(file)).count())).toList();
 
-Using shorthand `uc` instead of `unchecked`:
+You can use `uc` instead of `unchecked` if you prefer:
 
     List.of("LICENSE", "README.md", "unchecked.java").stream().map(uc(file -> 
         file + ": " + Files.lines(Paths.get(file)).count())).toList();
