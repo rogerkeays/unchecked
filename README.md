@@ -43,7 +43,7 @@ or install as a jar on your classpath.
 
 Copy the java source to your project:
 
-    mkdir src/unchecked && cd src/unchecked
+    mkdir src/jamaica && cd src/jamaica
     wget https://github.com/rogerkeays/unchecked/raw/main/unchecked.java
 
 Or build as a jar (installs to your maven repo if the `mvn` command is found):
@@ -55,14 +55,14 @@ Or build as a jar (installs to your maven repo if the `mvn` command is found):
 Add to your maven projects using:
 
     <dependency>
-      <groupId>unchecked</groupId>
+      <groupId>jamaica</groupId>
       <artifactId>unchecked</artifactId>
-      <version>0.9</version>
+      <version>0.9.0</version>
     </dependency>
 
 Import to use in your code:
 
-    import static unchecked.unchecked.*;
+    import static jamaica.unchecked.*;
 
 ## Testing
 

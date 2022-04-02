@@ -1,5 +1,3 @@
-//usr/bin/env test $0 -nt ${0/.java/.class} && javac $0 ; java -ea -cp `dirname $0` `basename $0 .java` $@; exit 0 ; # bash launcher
-
 /**
  * MIT License
  * 
@@ -24,7 +22,7 @@
  * SOFTWARE.
  */
 
-package unchecked;
+package jamaica;
 
 import java.util.function.*;
 import java.util.concurrent.Callable;
