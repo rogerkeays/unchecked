@@ -96,7 +96,7 @@ Or build as a jar:
     cd unchecked
     ./make
 
-The make command automatically installs the jar to your maven repo if the `mvn`
+The `make` script automatically installs the jar to your maven repo if the `mvn`
 command is found. To use in your maven projects, add the following dependency:
 
     <dependency>
@@ -107,7 +107,7 @@ command is found. To use in your maven projects, add the following dependency:
 
 For use with `jshell`, I recommend making a folder called `$HOME/.java/lib` and
 copying or symlinking all your commonly used libraries there. Then add the
-following CLASSPATH variable to your environment, for example in `.bashrc`:
+following `CLASSPATH` variable to your environment, for example in `.bashrc`:
 
     export CLASSPATH=$HOME/.java/lib/*
 
