@@ -62,7 +62,8 @@ as a RuntimeException:
     |        at String.<init> (String.java:1358)
     |        at (#9:3)
 
-With `unchecked`, you can throw the checked exception without wrapping:
+With `unchecked`, you can throw checked exceptions without wrapping them or
+declaring them in the method signature:
 
     try {
        byte[] bytes = {'f','o','o'};
