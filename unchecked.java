@@ -52,6 +52,10 @@ public class unchecked {
     public static <T,E extends Exception> Consumer<T> ucc(ThrowingConsumer<T,E> f) { return uncheckedconsumer(f); }
     public static <T,R,E extends Exception> Function<T,R> uc(ThrowingFunction<T,R,E> f) { return unchecked(f); }
 
+    // hack type erasure to throw a checked exception as an unchecked exception
+    public static RuntimeException unchecked(Exception e) { unchecked.<RuntimeException>throw_checked(e); return null; }
+    private static <E extends Exception> void throw_checked(Exception e) throws E { throw (E) e; }
+
     // function wrapper tests
     private static void $exception() throws Exception { throw new Exception(); }
     private static void $void() {}
@@ -72,11 +76,7 @@ public class unchecked {
         assert uncheckedconsumer((Object x) -> $void()) instanceof Consumer;
     }
 
-    // hack type erasure to throw a checked exception as an unchecked exception
-    public static RuntimeException unchecked(Exception e) { unchecked.<RuntimeException>throw_checked(e); return null; }
-    private static <E extends Exception> void throw_checked(Exception e) throws E { throw (E) e; }
-
-    // test throwing a checked exception
+    // test checked exception type erasure
     private static void $test_throws() {
         //throw new Exception(); // not allowed
         throw unchecked(new Exception()); // magic!
@@ -87,6 +87,4 @@ public class unchecked {
         $test_unchecked();
     }
 }
-
-// [1]: https://stackoverflow.com/questions/71276582/why-does-java-type-inference-fail-to-distinguish-between-function-and-consumer
 
