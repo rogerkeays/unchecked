@@ -30,27 +30,27 @@ import java.util.concurrent.Callable;
 public class unchecked {
 
     // replacements for the standard java functional interfaces which allow for exceptions 
-    public interface ThrowingRunnable<E extends Throwable> { void apply() throws E; }
-    public interface ThrowingCallable<R,E extends Throwable> { R apply() throws E; }
-    public interface ThrowingConsumer <T,E extends Throwable> { void apply(T t) throws E; }
-    public interface ThrowingFunction<T,R,E extends Throwable> { R apply(T t) throws E; }
+    public interface ThrowingRunnable<E extends Exception> { void apply() throws E; }
+    public interface ThrowingCallable<R,E extends Exception> { R apply() throws E; }
+    public interface ThrowingConsumer <T,E extends Exception> { void apply(T t) throws E; }
+    public interface ThrowingFunction<T,R,E extends Exception> { R apply(T t) throws E; }
 
     // functional wrappers which rethrow all exceptions as unchecked exceptions
     // consumers use a different name because java specifies they must also accept functions [1]
-    public static <E extends Throwable> Runnable unchecked(ThrowingRunnable<E> f) {
-        return () -> { try { f.apply(); } catch (Throwable e) { throw unchecked(e); } }; }
-    public static <R,E extends Throwable> Callable<R> unchecked(ThrowingCallable<R,E> f) {
-        return () -> { try { return f.apply(); } catch (Throwable e) { throw unchecked(e); } }; }
-    public static <T,E extends Throwable> Consumer<T> uncheckedconsumer(ThrowingConsumer<T,E> f) {
-        return t -> { try { f.apply(t); } catch (Throwable e) { throw unchecked(e); } }; }
-    public static <T,R,E extends Throwable> Function<T,R> unchecked(ThrowingFunction<T,R,E> f) {
-        return t -> { try { return f.apply(t); } catch (Throwable e) { throw unchecked(e); } }; }
+    public static <E extends Exception> Runnable unchecked(ThrowingRunnable<E> f) {
+        return () -> { try { f.apply(); } catch (Exception e) { throw unchecked(e); } }; }
+    public static <R,E extends Exception> Callable<R> unchecked(ThrowingCallable<R,E> f) {
+        return () -> { try { return f.apply(); } catch (Exception e) { throw unchecked(e); } }; }
+    public static <T,E extends Exception> Consumer<T> uncheckedconsumer(ThrowingConsumer<T,E> f) {
+        return t -> { try { f.apply(t); } catch (Exception e) { throw unchecked(e); } }; }
+    public static <T,R,E extends Exception> Function<T,R> unchecked(ThrowingFunction<T,R,E> f) {
+        return t -> { try { return f.apply(t); } catch (Exception e) { throw unchecked(e); } }; }
 
     // shorthand methods
-    public static <E extends Throwable> Runnable uc(ThrowingRunnable<E> f) { return unchecked(f); }
-    public static <R,E extends Throwable> Callable<R> uc(ThrowingCallable<R,E> f) { return unchecked(f); }
-    public static <T,E extends Throwable> Consumer<T> ucc(ThrowingConsumer<T,E> f) { return uncheckedconsumer(f); }
-    public static <T,R,E extends Throwable> Function<T,R> uc(ThrowingFunction<T,R,E> f) { return unchecked(f); }
+    public static <E extends Exception> Runnable uc(ThrowingRunnable<E> f) { return unchecked(f); }
+    public static <R,E extends Exception> Callable<R> uc(ThrowingCallable<R,E> f) { return unchecked(f); }
+    public static <T,E extends Exception> Consumer<T> ucc(ThrowingConsumer<T,E> f) { return uncheckedconsumer(f); }
+    public static <T,R,E extends Exception> Function<T,R> uc(ThrowingFunction<T,R,E> f) { return unchecked(f); }
 
     // function wrapper tests
     private static void $exception() throws Exception { throw new Exception(); }
@@ -72,8 +72,15 @@ public class unchecked {
         assert uncheckedconsumer((Object x) -> $void()) instanceof Consumer;
     }
 
-    // converts any exception to an unchecked exception
-    public static RuntimeException unchecked(Throwable e) { return new RuntimeException(e); }
+    // hack type erasure to throw a checked exception as an unchecked exception
+    public static RuntimeException unchecked(Exception e) { unchecked.<RuntimeException>throw_checked(e); return null; }
+    private static <E extends Exception> void throw_checked(Exception e) throws E { throw (E) e; }
+
+    // test throwing a checked exception
+    private static void $test_throws() {
+        //throw new Exception(); // not allowed
+        throw unchecked(new Exception()); // magic!
+    }
 
     // run tests when started from the command line
     public static void main(String [] args) {
