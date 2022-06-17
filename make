@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-VERSION=0.9.0
+VERSION=1.0.0
 #JAVA_HOME=/opt/jdk1.8.0_251 # for running maven
 
 # clean
