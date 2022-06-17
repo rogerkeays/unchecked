@@ -32,7 +32,7 @@ You can use `uc` instead of `unchecked` if you prefer:
         .map(uc(file -> file + ": " + Files.lines(Paths.get(file)).count()))
         .toList();
 
-Note, consumer functions must use `uncheckedconsumer` or `ucc`:
+Note, consumer functions must use `uncheckedconsumer` or `ucc` ([learn why][3]):
 
     List.of("LICENSE", "README.md", "unchecked.java")
         .forEach(uncheckedconsumer(file -> 
@@ -128,4 +128,5 @@ are enabled with the `java -ea` switch.
 
 [1]: https://projectlombok.org/features/SneakyThrows
 [2]: https://rogerkeays.com
+[3]: https://stackoverflow.com/questions/71276582/why-does-java-type-inference-fail-to-distinguish-between-function-and-consumer
 
