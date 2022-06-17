@@ -3,8 +3,11 @@
 VERSION=0.9.0
 #JAVA_HOME=/opt/jdk1.8.0_251 # for running maven
 
+# clean
+test -d target && rm -r target
+
 # compile
-test -d target || mkdir -p target
+mkdir -p target
 javac -d target unchecked.java
 jar --create --file target/unchecked-$VERSION.jar -C target jamaica
 
