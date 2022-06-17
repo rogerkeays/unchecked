@@ -36,7 +36,7 @@ public class unchecked {
     public interface ThrowingFunction<T,R,E extends Exception> { R apply(T t) throws E; }
 
     // functional wrappers which rethrow all exceptions as unchecked exceptions
-    // consumers use a different name because java specifies they must also accept functions [1]
+    // consumers use a different name because java specifies they must also accept functions
     public static <E extends Exception> Runnable unchecked(ThrowingRunnable<E> f) {
         return () -> { try { f.apply(); } catch (Exception e) { throw unchecked(e); } }; }
     public static <R,E extends Exception> Callable<R> unchecked(ThrowingCallable<R,E> f) {
