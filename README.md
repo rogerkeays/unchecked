@@ -44,24 +44,41 @@ Note, consumer functions must use `uncheckedconsumer` or `ucc`:
 
 ## Procedural Examples
 
-When you can't handle a checked exception, a common practise is to rethrow it as a 
-RuntimeException:
+When you can't handle a checked exception, a common practise is to rethrow it
+as a RuntimeException:
 
     try {
-       String foo = new String(byteArr, "UTF-8");
+       byte[] bytes = {'f','o','o'};
+       String foo = new String(bytes, "WOOPS");
     } catch (UnsupportedEncodingException e) {
        throw new RuntimeException(e);
     }
 
+    |  Exception java.lang.RuntimeException: java.io.UnsupportedEncodingException: WOOPS
+    |        at (#9:5)
+    |  Caused by: java.io.UnsupportedEncodingException: WOOPS
+    |        at String.lookupCharset (String.java:819)
+    |        at String.<init> (String.java:487)
+    |        at String.<init> (String.java:1358)
+    |        at (#9:3)
+
 With `unchecked`, you can throw the checked exception without wrapping:
 
     try {
-       String foo = new String(byteArr, "UTF-8");
+       byte[] bytes = {'f','o','o'};
+       String foo = new String(bytes, "WOOPS");
     } catch (UnsupportedEncodingException e) {
        throw unchecked(e);
     }
 
-This is possible because of Java's runtime type erasure. See the code for implementation details.
+    |  Exception java.io.UnsupportedEncodingException: WOOPS
+    |        at String.lookupCharset (String.java:819)
+    |        at String.<init> (String.java:487)
+    |        at String.<init> (String.java:1358)
+    |        at (#10:3)
+
+This is possible because of Java's runtime type erasure. See the code for
+implementation details.
 
 ## Installation
 
@@ -89,8 +106,8 @@ command is found. To use in your maven projects, add the following dependency:
     </dependency>
 
 For use with `jshell`, I recommend making a folder called `$HOME/.java/lib` and
-copying or symlinking your commonly used libraries there. Then add the following 
-CLASSPATH variable to your environment, for example in `.bashrc`:
+copying or symlinking all your commonly used libraries there. Then add the
+following CLASSPATH variable to your environment, for example in `.bashrc`:
 
     export CLASSPATH=$HOME/.java/lib/*
 
