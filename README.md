@@ -126,7 +126,7 @@ are enabled with the `java -ea` switch.
 
  - [Lombok @SneakyThrows][1]
  - [Function type inference discussion on Stack Overflow][2]
- - For more solutions looking for a problem, visit [the authors homepage][3]
+ - [More solutions looking for a problem][3]
 
 [1]: https://projectlombok.org/features/SneakyThrows
 [2]: https://stackoverflow.com/questions/71276582/why-does-java-type-inference-fail-to-distinguish-between-function-and-consumer
