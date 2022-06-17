@@ -6,35 +6,62 @@ Evade the Java checked exception mafia.
 your functions, and a utility method to rethrow checked exceptions as unchecked
 exceptions from your procedural code.
 
-## Examples
+## Lambda Examples
 
 Before (exceptions must be handled inside the lambda):
 
-    List.of("LICENSE", "README.md", "unchecked.java").stream().map(file -> {
-        try {
-            return(file + ": " + Files.lines(Paths.get(file)).count());
-        } catch (IOException e) {
-            return(file + ": " + e.getMessage()); // java made me do it
-        }
-    }).toList();
+    List.of("LICENSE", "README.md", "unchecked.java").stream()
+        .map(file -> {
+            try {
+                return(file + ": " + Files.lines(Paths.get(file)).count());
+            } catch (IOException e) {
+                return(file + ": " + e.getMessage()); // java made me do it
+            }
+        })
+        .toList();
 
 After (exceptions can now be handled outside the lambda):
 
-    List.of("LICENSE", "README.md", "unchecked.java").stream().map(unchecked(file -> 
-        file + ": " + Files.lines(Paths.get(file)).count())).toList();
+    List.of("LICENSE", "README.md", "unchecked.java").stream()
+        .map(unchecked(file -> file + ": " + Files.lines(Paths.get(file)).count()))
+        .toList();
 
 You can use `uc` instead of `unchecked` if you prefer:
 
-    List.of("LICENSE", "README.md", "unchecked.java").stream().map(uc(file -> 
-        file + ": " + Files.lines(Paths.get(file)).count())).toList();
+    List.of("LICENSE", "README.md", "unchecked.java").stream()
+        .map(uc(file -> file + ": " + Files.lines(Paths.get(file)).count()))
+        .toList();
 
 Note, consumer functions must use `uncheckedconsumer` or `ucc`:
 
-    List.of("LICENSE", "README.md", "unchecked.java").forEach(uncheckedconsumer(file -> 
-        System.out.println(file + ": " + Files.lines(Paths.get(file)).count())));
+    List.of("LICENSE", "README.md", "unchecked.java")
+        .forEach(uncheckedconsumer(file -> 
+            System.out.println(file + ": " + Files.lines(Paths.get(file)).count())));
 
-    List.of("LICENSE", "README.md", "unchecked.java").forEach(ucc(file -> 
-        System.out.println(file + ": " + Files.lines(Paths.get(file)).count())));
+    List.of("LICENSE", "README.md", "unchecked.java")
+        .forEach(ucc(file -> 
+            System.out.println(file + ": " + Files.lines(Paths.get(file)).count())));
+
+## Procedural Examples
+
+When you can't handle a checked exception, a common practise is to rethrow it as a 
+RuntimeException:
+
+    try {
+       String foo = new String(byteArr, "UTF-8");
+    } catch (UnsupportedEncodingException e) {
+       throw new RuntimeException(e);
+    }
+
+With `unchecked`, you can throw the checked exception without wrapping:
+
+    try {
+       String foo = new String(byteArr, "UTF-8");
+    } catch (UnsupportedEncodingException e) {
+       throw unchecked(e);
+    }
+
+This is possible because of Java's runtime type erasure. See the code for implementation details.
 
 ## Installation
 
@@ -46,21 +73,28 @@ Copy the java source to your project:
     mkdir src/jamaica && cd src/jamaica
     wget https://github.com/rogerkeays/unchecked/raw/main/unchecked.java
 
-Or build as a jar (installs to your maven repo if the `mvn` command is found):
+Or build as a jar:
 
     git clone https://github.com/rogerkeays/unchecked
     cd unchecked
     ./make
 
-Add to your maven projects using:
+The make command automatically installs the jar to your maven repo if the `mvn`
+command is found. To use in your maven projects, add the following dependency:
 
     <dependency>
       <groupId>jamaica</groupId>
       <artifactId>unchecked</artifactId>
-      <version>0.9.0</version>
+      <version>1.0.0</version>
     </dependency>
 
-Import to use in your code:
+For use with `jshell`, I recommend making a folder called `$HOME/.java/lib` and
+copying or symlinking your commonly used libraries there. Then add the following 
+CLASSPATH variable to your environment, for example in `.bashrc`:
+
+    export CLASSPATH=$HOME/.java/lib/*
+
+Finally, import to use in your code:
 
     import static jamaica.unchecked.*;
 
