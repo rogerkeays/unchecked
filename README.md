@@ -20,7 +20,7 @@ Before:
         })
         .toList();
 
-After (exceptions will propogate up the call stack):
+After (exceptions will propagate up the call stack):
 
     List.of("LICENSE", "README.md", "unchecked.java").stream()
         .map(unchecked(file -> file + ": " + Files.lines(Paths.get(file)).count()))
