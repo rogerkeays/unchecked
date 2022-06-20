@@ -47,36 +47,47 @@ Note, consumer functions must use `uncheckedconsumer` or `ucc`:
 When you can't handle a checked exception, a common practise is to rethrow it
 as a RuntimeException:
 
-    try {
-       byte[] bytes = {'f','o','o'};
-       String foo = new String(bytes, "WOOPS");
-    } catch (UnsupportedEncodingException e) {
-       throw new RuntimeException(e);
+    public static void rm() {
+        try {
+            Files.delete(Paths.get("unchecked.kt"));
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 
-    |  Exception java.lang.RuntimeException: java.io.UnsupportedEncodingException: WOOPS
-    |        at (#9:5)
-    |  Caused by: java.io.UnsupportedEncodingException: WOOPS
-    |        at String.lookupCharset (String.java:819)
-    |        at String.<init> (String.java:487)
-    |        at String.<init> (String.java:1358)
-    |        at (#9:3)
+    |  Exception java.lang.RuntimeException: java.nio.file.NoSuchFileException: unchecked.kt
+    |        at rm (#22:5)
+    |        at (#23:1)
+    |  Caused by: java.nio.file.NoSuchFileException: unchecked.kt
+    |        at UnixException.translateToIOException (UnixException.java:92)
+    |        at UnixException.rethrowAsIOException (UnixException.java:106)
+    |        at UnixException.rethrowAsIOException (UnixException.java:111)
+    |        at UnixFileSystemProvider.implDelete (UnixFileSystemProvider.java:248)
+    |        at AbstractFileSystemProvider.delete (AbstractFileSystemProvider.java:105)
+    |        at Files.delete (Files.java:1152)
+    |        at rm (#22:3)
+    |        ...
 
 With `unchecked`, you can throw checked exceptions without wrapping them or
 declaring them in the method signature:
 
-    try {
-       byte[] bytes = {'f','o','o'};
-       String foo = new String(bytes, "WOOPS");
-    } catch (UnsupportedEncodingException e) {
-       throw unchecked(e);
+    public static void rm() {
+        try {
+            Files.delete(Paths.get("unchecked.kt"));
+        } catch (IOException e) {
+            throw unchecked(e);
+        }
     }
 
-    |  Exception java.io.UnsupportedEncodingException: WOOPS
-    |        at String.lookupCharset (String.java:819)
-    |        at String.<init> (String.java:487)
-    |        at String.<init> (String.java:1358)
-    |        at (#10:3)
+    |  Exception java.nio.file.NoSuchFileException: unchecked.kt
+    |        at UnixException.translateToIOException (UnixException.java:92)
+    |        at UnixException.rethrowAsIOException (UnixException.java:106)
+    |        at UnixException.rethrowAsIOException (UnixException.java:111)
+    |        at UnixFileSystemProvider.implDelete (UnixFileSystemProvider.java:248)
+    |        at AbstractFileSystemProvider.delete (AbstractFileSystemProvider.java:105)
+    |        at Files.delete (Files.java:1152)
+    |        at rm (#20:3)
+    |        at (#21:1)
 
 This is possible because of Java's runtime type erasure. See the code for
 implementation details.
