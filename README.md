@@ -8,7 +8,7 @@ unchecked exceptions from your procedural code.
 
 ## Lambda Examples
 
-Before (exceptions must be handled inside the lambda):
+Before:
 
     List.of("LICENSE", "README.md", "unchecked.java").stream()
         .map(file -> {
@@ -20,7 +20,7 @@ Before (exceptions must be handled inside the lambda):
         })
         .toList();
 
-After (exceptions can now be handled outside the lambda):
+After:
 
     List.of("LICENSE", "README.md", "unchecked.java").stream()
         .map(unchecked(file -> file + ": " + Files.lines(Paths.get(file)).count()))
