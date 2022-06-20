@@ -1,10 +1,10 @@
 # unchecked
 
-Evade the Java checked exception mafia.
+Evade the checked exception mafia.
 
 `unchecked` provides wrapper functions to bypass checked exception handling in
-your functions, and a utility method to rethrow checked exceptions as unchecked
-exceptions from your procedural code.
+your java functions, and a utility method to rethrow checked exceptions as
+unchecked exceptions from your procedural code.
 
 ## Lambda Examples
 
