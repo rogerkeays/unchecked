@@ -15,7 +15,7 @@ Before:
             try {
                 return(file + ": " + Files.lines(Paths.get(file)).count());
             } catch (IOException e) {
-                return(file + ": " + e.getMessage()); // java made me do it
+                throw new RuntimeException(e); // java made me do it
             }
         })
         .toList();
