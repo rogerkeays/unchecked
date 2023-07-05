@@ -63,7 +63,7 @@ With *Unchecked*, you are not obliged to declare exceptions in the method signat
     |        at rm (#20:3)
     |        at (#21:1)
 
-*Unchecked* is implemented as a compiler plugin and has no runtime dependencies.
+*Unchecked* is invoked as a compiler plugin and has no runtime dependencies.
 
 ## Quick Start
 
