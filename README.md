@@ -34,6 +34,7 @@ as a RuntimeException:
 
 Which causes a chain of exceptions, nested inside one another:
 
+    |  jshell> rm();
     |  Exception java.lang.RuntimeException: java.nio.file.NoSuchFileException: unchecked.kt
     |        at rm (#22:5)
     |        at (#23:1)
@@ -47,12 +48,13 @@ Which causes a chain of exceptions, nested inside one another:
     |        at rm (#22:3)
     |        ...
 
-With *Unchecked*, you are not obliged to declare exceptions in the method signature, and the exception stack does not become polluted:
+With *Unchecked*, you can let checked exceptions go back up the call stack. You are not obliged to declare exceptions in the method signature, and the exception stack does not become polluted:
 
     public static void rm() {
         Files.delete(Paths.get("unchecked.kt"));
     }
 
+    |  jshell> rm();
     |  Exception java.nio.file.NoSuchFileException: unchecked.kt
     |        at UnixException.translateToIOException (UnixException.java:92)
     |        at UnixException.rethrowAsIOException (UnixException.java:106)
