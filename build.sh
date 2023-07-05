@@ -8,7 +8,7 @@ TARGET=9
 
 # directories containing jdks to test against, separated by spaces
 JDKS="$JAVA_HOME"
-JDKS="$HOME/tools/jdk-*"
+#JDKS="$HOME/tools/jdk-*"
 
 # javac arguments to inject the compiled plugin
 WITH_PLUGIN="-Xplugin:unchecked -J--add-opens=java.base/jdk.internal.misc=ALL-UNNAMED"
