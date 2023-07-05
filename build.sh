@@ -1,20 +1,40 @@
 #!/bin/sh
 
-VERSION=1.1.0
-#JAVA_HOME=/opt/jdk1.8.0_251 # for running maven
+VERSION=2.0.0
+TARGET=9
 
-# clean
-test -d target && rm -r target
+# location of jdk for building
+[ ! "$JAVA_HOME" ] && JAVA_HOME="$(dirname $(dirname $(readlink -f $(which javac))))"
 
-# compile
-mkdir -p target
-javac -d target Functions.java
-jar --create --file target/unchecked-$VERSION.jar -C target jamaica
+# directories containing jdks to test against, separated by spaces
+JDKS="$JAVA_HOME"
+JDKS="$HOME/tools/jdk-*"
 
-# run tests
-java -cp target/unchecked-$VERSION.jar jamaica.unchecked.Functions
+# javac arguments to inject the compiled plugin
+WITH_PLUGIN="-Xplugin:unchecked -J--add-opens=java.base/jdk.internal.misc=ALL-UNNAMED"
 
-# install to maven repo if mvn command available
-command -v mvn && \
-mvn install:install-file -Dfile=target/unchecked-$VERSION.jar -DgroupId=jamaica -DartifactId=unchecked -Dversion=$VERSION -Dpackaging=jar
+# compile and build jar
+# note: -source 8 is required to import com.sun.tools.javac.*
+echo "===== BUILDING ====="
+echo $JAVA_HOME
+[ -d target ] && rm -r target
+mkdir -p target/META-INF/services
+echo "com.sun.tools.javac.comp.Unchecked" > target/META-INF/services/com.sun.source.util.Plugin
+$JAVA_HOME/bin/javac  -Xlint:deprecation -Xlint:unchecked -nowarn -source 8 -target $TARGET -d target Unchecked.java
+[ $? -eq 0 ] || exit 1
+cd target; $JAVA_HOME/bin/jar --create --file ../unchecked.jar *; cd ..
+
+# test against all jdks
+echo "\n===== TESTING ====="
+for JDK in $JDKS; do
+    echo $JDK
+    "$JDK"/bin/javac -Xlint:deprecation -cp unchecked.jar -d target $WITH_PLUGIN Test.java
+    [ $? -eq 0 ] || exit 1
+    "$JDK"/bin/java -cp target -enableassertions Test
+    [ $? -eq 0 ] || exit 1
+done
+
+# install using maven
+echo "===== INSTALLING WITH MAVEN ====="
+mvn install:install-file -DgroupId=jamaica -DartifactId=unchecked -Dversion=$VERSION -Dpackaging=jar -Dfile=unchecked.jar
 
