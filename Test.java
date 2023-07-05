@@ -30,6 +30,17 @@ public class Test {
         assert ((Function<Integer, Integer>) x -> { return one(); }).apply(5).equals(1);
 
         // functional code with exception handling
+        ((Runnable) () -> { 
+            for (int i = 0; i < 1; i++) {
+                try { throw new Exception(); } catch (Exception e) { if (1 == 1) break; }
+                assert false;
+            }
+        }).run();
+        ((Runnable) () -> { 
+            try {
+                assert new String(STARS, "UTF-8").equals("***");
+            } catch (UnsupportedEncodingException e) {} // okay, never thrown
+        }).run();
 
         // functional code ignoring exceptions
         ((Runnable) () -> { new String(new byte[] { 42, 42, 42 }, "UTF-8"); }).run();
