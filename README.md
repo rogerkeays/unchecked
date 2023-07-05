@@ -1,4 +1,4 @@
-# Unchecked: Say Goodbye to Checked Exceptions Forever.
+# Unchecked Java: Say Goodbye to Checked Exceptions Forever.
 
 *Unchecked* allows you to treat Java's checked exceptions as though they were
 unchecked.
