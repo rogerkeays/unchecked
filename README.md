@@ -3,8 +3,6 @@
 *Unchecked* allows you to treat Java's checked exceptions as though they were
 unchecked.
 
-## Functional Examples
-
 Before:
 
     List.of("LICENSE", "README.md", "Unchecked.java").stream()
@@ -22,8 +20,6 @@ After:
     List.of("LICENSE", "README.md", "Unchecked.java").stream()
         .map(file -> file + ": " + Files.lines(Paths.get(file)).count())
         .toList();
-
-## Procedural Examples
 
 When you can't handle a checked exception, a common practise is to rethrow it
 as a RuntimeException:
@@ -66,6 +62,8 @@ With *Unchecked*, you are not obliged to declare exceptions in the method signat
     |        at Files.delete (Files.java:1152)
     |        at rm (#20:3)
     |        at (#21:1)
+
+*Unchecked* is implemented as a compiler plugin and has no runtime dependencies.
 
 ## Quick Start
 
@@ -145,7 +143,7 @@ If your operating system doesn't include `sh` it shouldn't be too hard to conver
 
 ## IDE Support
 
-There is currently no IDE support for *Unchecked*. Contributions are welcome. Other projects such as Lombox and Manifold have the same feature, so you may be able to use their plugins.
+There is currently no IDE support for *Unchecked*. Contributions are welcome. Other projects such as Lombok and Manifold have the same feature, so you may be able to use their plugins.
 
 ## Known Issues
 
@@ -156,5 +154,6 @@ There is currently no IDE support for *Unchecked*. Contributions are welcome. Ot
   * [kotlin](https://kotlinlang.org): a JVM language which supports extension methods out of the box.
   * [Lombok](https://github.com/projectlombok/lombok): the grand-daddy of `javac` hacks, with various tools for handling checked exceptions.
   * [Manifold](https://manifold.systems): a `javac` plugin with many features, including disabling checked exceptions.
-  * [More solutions looking for a problem][3]
+  * [Helper functions for handling checked exceptions](https://github.com/rogerkeays/unchecked/blob/main/Functions.java): for when you can't use a compiler plugin.
+  * [More solutions looking for a problem](https://rogerkeays.com)
 
