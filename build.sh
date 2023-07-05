@@ -1,6 +1,6 @@
-#!/usr/bin/env bash
+#!/bin/sh
 
-VERSION=1.0.0
+VERSION=1.1.0
 #JAVA_HOME=/opt/jdk1.8.0_251 # for running maven
 
 # clean
@@ -8,11 +8,11 @@ test -d target && rm -r target
 
 # compile
 mkdir -p target
-javac -d target unchecked.java
+javac -d target Functions.java
 jar --create --file target/unchecked-$VERSION.jar -C target jamaica
 
 # run tests
-java -cp target/unchecked-$VERSION.jar jamaica.unchecked
+java -cp target/unchecked-$VERSION.jar jamaica.unchecked.Functions
 
 # install to maven repo if mvn command available
 command -v mvn && \

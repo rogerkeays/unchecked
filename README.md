@@ -125,7 +125,7 @@ following `CLASSPATH` variable to your environment, for example in `.bashrc`:
 
 Finally, import to use in your code:
 
-    import static jamaica.unchecked.*;
+    import static jamaica.unchecked.Functions.*;
 
 ## Testing
 
