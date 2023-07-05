@@ -1,16 +1,13 @@
-# unchecked
+# Unchecked: Evade the checked exception mafia.
 
-Evade the checked exception mafia.
+*Unchecked* allows you to treat Java's checked exceptions as though they were
+unchecked.
 
-`unchecked` provides wrapper functions to bypass checked exception handling in
-your java functions, and a utility method to rethrow checked exceptions as
-unchecked exceptions from your procedural code.
-
-## Lambda Examples
+## Functional Examples
 
 Before:
 
-    List.of("LICENSE", "README.md", "unchecked.java").stream()
+    List.of("LICENSE", "README.md", "Unchecked.java").stream()
         .map(file -> {
             try {
                 return(file + ": " + Files.lines(Paths.get(file)).count());
@@ -20,27 +17,11 @@ Before:
         })
         .toList();
 
-After (exceptions will propagate up the call stack):
+After:
 
-    List.of("LICENSE", "README.md", "unchecked.java").stream()
-        .map(unchecked(file -> file + ": " + Files.lines(Paths.get(file)).count()))
+    List.of("LICENSE", "README.md", "Unchecked.java").stream()
+        .map(file -> file + ": " + Files.lines(Paths.get(file)).count())
         .toList();
-
-You can use `uc` instead of `unchecked` if you prefer:
-
-    List.of("LICENSE", "README.md", "unchecked.java").stream()
-        .map(uc(file -> file + ": " + Files.lines(Paths.get(file)).count()))
-        .toList();
-
-Note, consumer functions must use `uncheckedconsumer` or `ucc`:
-
-    List.of("LICENSE", "README.md", "unchecked.java")
-        .forEach(uncheckedconsumer(file -> 
-            System.out.println(file + ": " + Files.lines(Paths.get(file)).count())));
-
-    List.of("LICENSE", "README.md", "unchecked.java")
-        .forEach(ucc(file -> 
-            System.out.println(file + ": " + Files.lines(Paths.get(file)).count())));
 
 ## Procedural Examples
 
@@ -55,6 +36,8 @@ as a RuntimeException:
         }
     }
 
+Which causes a chain of exceptions, nested inside one another:
+
     |  Exception java.lang.RuntimeException: java.nio.file.NoSuchFileException: unchecked.kt
     |        at rm (#22:5)
     |        at (#23:1)
@@ -68,15 +51,10 @@ as a RuntimeException:
     |        at rm (#22:3)
     |        ...
 
-With `unchecked`, you can throw checked exceptions without wrapping them or
-declaring them in the method signature:
+With *Unchecked*, you are not obliged to declare exceptions in the method signature, and the exception stack does not become polluted:
 
     public static void rm() {
-        try {
-            Files.delete(Paths.get("unchecked.kt"));
-        } catch (IOException e) {
-            throw unchecked(e);
-        }
+        Files.delete(Paths.get("unchecked.kt"));
     }
 
     |  Exception java.nio.file.NoSuchFileException: unchecked.kt
@@ -89,57 +67,94 @@ declaring them in the method signature:
     |        at rm (#20:3)
     |        at (#21:1)
 
-This is possible because of Java's runtime type erasure. See the code for
-implementation details.
+## Quick Start
 
-## Installation
+Download the jar, place it on your classpath, and run `javac` with `-Xplugin:unchecked` and `-J--add-opens=java.base/jdk.internal.misc=ALL-UNNAMED`:
 
-`unchecked` is a single java source file that you can drop into your project,
-or install as a jar on your classpath.
+    wget https://github.com/rogerkeays/unchecked/raw/main/unchecked.jar
+    javac -cp fluent.jar -Xplugin:unchecked -J--add-opens=java.base/jdk.internal.misc=ALL-UNNAMED Test.java
 
-Copy the java source to your project:
+Run your code like you always have:
 
-    mkdir src/jamaica && cd src/jamaica
-    wget https://github.com/rogerkeays/unchecked/raw/main/unchecked.java
+    java Test
 
-Or build as a jar:
+## Install Using Maven
 
-    git clone https://github.com/rogerkeays/unchecked
-    cd unchecked
-    ./make
+*Unchecked* is not yet available on Maven Central, however you can install it locally like this:
 
-The `make` script automatically installs the jar to your maven repo if the `mvn`
-command is found. To use in your maven projects, add the following dependency:
+    wget https://github.com/rogerkeays/unchecked/raw/main/unchecked.jar
+    mvn install:install-file -DgroupId=jamaica -DartifactId=unchecked -Dversion=2.0.0 -Dpackaging=jar -Dfile=unchecked.jar
+    
+Next, add the dependency to your `pom.xml`:
 
     <dependency>
       <groupId>jamaica</groupId>
       <artifactId>unchecked</artifactId>
-      <version>1.0.0</version>
+      <version>2.0.0</version>
+      <scope>compile</scope>
     </dependency>
 
-For use with `jshell`, I recommend making a folder called `$HOME/.java/lib` and
-copying or symlinking all your commonly used libraries there. Then add the
-following `CLASSPATH` variable to your environment, for example in `.bashrc`:
+And configure the compiler plugin:
 
-    export CLASSPATH=$HOME/.java/lib/*
+    <build>
+      <plugins>
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-compiler-plugin</artifactId>
+          <version>3.11.0</version>
+          <configuration>
+            <compilerArgs>
+              <arg>-Xplugin:unchecked</arg>
+              <arg>-J--add-opens=java.base/jdk.internal.misc=ALL-UNNAMED</arg>
+            </compilerArg>
+            <fork>true</fork>
+            ...
+          </configuration>
+        </plugin>
 
-Finally, import to use in your code:
+Note, older versions of the compiler plugin use a different syntax. Refer to the [Maven Compiler Plugin docs](https://maven.apache.org/plugins/maven-compiler-plugin/compile-mojo.html) for more details. Make sure you add the `<fork>true</fork>` option too.
 
-    import static jamaica.unchecked.Functions.*;
+## Build It Yourself
 
-## Testing
+*Unchecked* is built using a POSIX shell script:
 
-Tests are run by the `make` script. No output means the tests ran successfully.
-If you want to run the tests from your own build system, make sure assertions
-are enabled with the `java -ea` switch.
+    git clone https://github.com/rogerkeays/unchecked.git
+    cd unchecked
+    ./build.sh
+
+If your operating system doesn't include `sh` it shouldn't be too hard to convert to whatever shell you are using. I mean, we're talking about one java file and a text file here.
+
+## JDK Support
+
+*Fluent* is tested with the following JDKs:
+
+  * jdk-09.0.4
+  * jdk-10.0.2
+  * jdk-11.0.8
+  * jdk-12.0.2
+  * jdk-13.0.2
+  * jdk-14.0.2
+  * jdk-15.0.2
+  * jdk-16.0.2
+  * jdk-17.0.2
+  * jdk-18.0.2.1
+  * jdk-19.0.2
+  * jdk-20.0.1
+  * jdk-21 (early access)
+  * jdk-22 (early access)
+
+## IDE Support
+
+There is currently no IDE support for *Unchecked*. Contributions are welcome. Other projects such as Lombox and Manifold have the same feature, so you may be able to use their plugins.
+
+## Known Issues
+
+  * The compiler will warn about your existing catches being unreachable, though they still work just fine.
 
 ## Related Resources
 
- - [Lombok @SneakyThrows][1]
- - [Function type inference discussion on Stack Overflow][2]
- - [More solutions looking for a problem][3]
-
-[1]: https://projectlombok.org/features/SneakyThrows
-[2]: https://stackoverflow.com/questions/71276582/why-does-java-type-inference-fail-to-distinguish-between-function-and-consumer
-[3]: https://rogerkeays.com
+  * [kotlin](https://kotlinlang.org): a JVM language which supports extension methods out of the box.
+  * [Lombok](https://github.com/projectlombok/lombok): the grand-daddy of `javac` hacks, with various tools for handling checked exceptions.
+  * [Manifold](https://manifold.systems): a `javac` plugin with many features, including disabling checked exceptions.
+  * [More solutions looking for a problem][3]
 
