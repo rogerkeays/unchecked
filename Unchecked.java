@@ -23,7 +23,7 @@ public class Unchecked implements Plugin {
             Method open = Module.class.getDeclaredMethod("implAddOpens", String.class, Module.class);
             Field f = Unsafe.class.getDeclaredField("theUnsafe"); f.setAccessible(true);
             Unsafe unsafe = (Unsafe) f.get(null);
-            unsafe.putBoolean(open, 12, true); // make it public
+            unsafe.putBoolean(open, 12, true); // make implAddOpens public
             open.invoke(compilerModule, "com.sun.tools.javac.api", unnamedModule);
             open.invoke(compilerModule, "com.sun.tools.javac.comp", unnamedModule);
             open.invoke(compilerModule, "com.sun.tools.javac.main", unnamedModule);
