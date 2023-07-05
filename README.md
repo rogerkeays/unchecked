@@ -70,7 +70,7 @@ With *Unchecked*, you are not obliged to declare exceptions in the method signat
 Download the jar, place it on your classpath, and run `javac` with `-Xplugin:unchecked` and `-J--add-opens=java.base/jdk.internal.misc=ALL-UNNAMED`:
 
     wget https://github.com/rogerkeays/unchecked/raw/main/unchecked.jar
-    javac -cp fluent.jar -Xplugin:unchecked -J--add-opens=java.base/jdk.internal.misc=ALL-UNNAMED Test.java
+    javac -cp unchecked.jar -Xplugin:unchecked -J--add-opens=java.base/jdk.internal.misc=ALL-UNNAMED Test.java
 
 Run your code like you always have:
 
@@ -124,7 +124,7 @@ If your operating system doesn't include `sh` it shouldn't be too hard to conver
 
 ## JDK Support
 
-*Fluent* is tested with the following JDKs:
+*Unchecked* is tested with the following JDKs:
 
   * jdk-09.0.4
   * jdk-10.0.2
