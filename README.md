@@ -155,5 +155,6 @@ There is currently no IDE support for *Unchecked*. Contributions are welcome. Ot
   * [Lombok](https://github.com/projectlombok/lombok): the grand-daddy of `javac` hacks, with various tools for handling checked exceptions.
   * [Manifold](https://manifold.systems): a `javac` plugin with many features, including disabling checked exceptions.
   * [Helper functions for handling checked exceptions](https://github.com/rogerkeays/unchecked/blob/main/Functions.java): for when you can't use a compiler plugin.
+  * [Fluent](https://github.com/rogerkeays/fluent): a compiler plugin to support static extension methods.
   * [More solutions looking for a problem](https://rogerkeays.com)
 
