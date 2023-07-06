@@ -1,5 +1,5 @@
 
-import java.io.UnsupportedEncodingException;
+import java.io.*;
 import java.util.function.*;
 import java.util.concurrent.Callable;
 
@@ -13,9 +13,27 @@ public class TestValid {
             try { throw new Exception(); } catch (Exception e) { if (1 == 1) break; }
             assert false;
         }
+
         try {
             assert new String(STARS, "UTF-8").equals("***");
-        } catch (UnsupportedEncodingException e) {} // okay, never thrown
+        } catch (UnsupportedEncodingException e) {}
+
+        // traditional resource handling
+        OutputStream s = null;
+        try {
+            s = new ByteArrayOutputStream();
+            s.write((byte) 0);
+        } catch (IOException e) {
+        } finally {
+            try {
+                s.close();
+            } catch (IOException e) {}
+        }
+
+        // unchecked resource handling
+        OutputStream s2 = new ByteArrayOutputStream();
+        s2.write((byte) 0);
+        s2.close(); // still use finally in real code, please
 
         // procedural code with unchecked exceptions
         try { int i = 0; } catch (NullPointerException e) {}
