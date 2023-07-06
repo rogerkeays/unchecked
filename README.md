@@ -21,7 +21,7 @@ After:
         .map(file -> file + ": " + Files.lines(Paths.get(file)).count())
         .toList();
 
-When you can't handle a checked exception, a common practise is to rethrow it as a RuntimeException. With *Unchecked*, this is no longer necessary.
+When you can't handle a checked exception, a common practise is to rethrow it as a RuntimeException. With *Unchecked*, this is no longer necessary. The exception will just trickle back up the call stack.
 
 Before:
 
