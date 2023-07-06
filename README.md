@@ -21,6 +21,8 @@ After:
         .map(file -> file + ": " + Files.lines(Paths.get(file)).count())
         .toList();
 
+When you can't handle a checked exception, a common practise is to rethrow it as a RuntimeException. With *Unchecked*, this is no longer necessary.
+
 Before:
 
     public static void rm() {
@@ -36,6 +38,8 @@ After:
     public static void rm() {
         Files.delete(Paths.get("unchecked.kt"));
     }
+
+The problem with wrapping checked exceptions, apart from the code pollution, is that the root cause of exceptions get hidden, and sometimes lost if developers forget to retain it.
 
 Before:
 
