@@ -28,10 +28,16 @@ cd target; $JAVA_HOME/bin/jar --create --file ../unchecked.jar *; cd ..
 echo "\n===== TESTING ====="
 for JDK in $JDKS; do
     echo $JDK
-    "$JDK"/bin/javac -Xlint:deprecation -cp unchecked.jar -d target $WITH_PLUGIN Test.java
+    "$JDK"/bin/javac -Xlint:deprecation -cp unchecked.jar -d target $WITH_PLUGIN TestValid.java
     [ $? -eq 0 ] || exit 1
-    "$JDK"/bin/java -cp target -enableassertions Test
+    "$JDK"/bin/java -cp target -enableassertions TestValid
     [ $? -eq 0 ] || exit 1
+done
+echo "\n----- press enter to begin error test cases"; read x
+for JDK in $JDKS; do
+    echo $JDK
+    "$JDK"/bin/javac -cp unchecked.jar -d target $WITH_FLUENT TestErrors.java
+    echo "\n----- press enter to continue"; read x
 done
 
 # install using maven

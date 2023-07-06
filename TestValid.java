@@ -3,12 +3,12 @@ import java.io.UnsupportedEncodingException;
 import java.util.function.*;
 import java.util.concurrent.Callable;
 
-public class Test {
+public class TestValid {
     private static final byte[] STARS = new byte[] { 42, 42, 42 };
 
     public static void main(String [] args) {
     
-        // procedural code with exception handling
+        // procedural code with checked exception handling
         for (int i = 0; i < 1; i++) {
             try { throw new Exception(); } catch (Exception e) { if (1 == 1) break; }
             assert false;
@@ -16,6 +16,9 @@ public class Test {
         try {
             assert new String(STARS, "UTF-8").equals("***");
         } catch (UnsupportedEncodingException e) {} // okay, never thrown
+
+        // procedural code with unchecked exceptions
+        try { int i = 0; } catch (NullPointerException e) {}
 
         // procedural code ignoring exceptions
         assert new String(STARS, "UTF-8").equals("***");
