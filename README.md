@@ -3,7 +3,7 @@
 *Unchecked* allows you to treat Java's checked exceptions as though they were
 unchecked.
 
-Before:
+**Before:**
 
     List.of("LICENSE", "README.md", "Unchecked.java").stream()
         .map(file -> {
@@ -15,7 +15,7 @@ Before:
         })
         .toList();
 
-After:
+**After:**
 
     List.of("LICENSE", "README.md", "Unchecked.java").stream()
         .map(file -> file + ": " + Files.lines(Paths.get(file)).count())
@@ -23,7 +23,7 @@ After:
 
 When you can't handle a checked exception, a common practise is to rethrow it as a RuntimeException. With *Unchecked*, this is no longer necessary. The exception will just be passed back up the call stack.
 
-Before:
+**Before:**
 
     public static void rm() {
         try {
@@ -33,7 +33,7 @@ Before:
         }
     }
 
-After:
+**After:**
 
     public static void rm() {
         Files.delete(Paths.get("unchecked.kt"));
@@ -41,7 +41,7 @@ After:
 
 The problem with wrapping checked exceptions, apart from the code pollution, is that the root cause of exceptions get hidden, and sometimes lost if developers forget to retain it.
 
-Before:
+**Before:**
 
     |  jshell> rm();
     |  Exception java.lang.RuntimeException: java.nio.file.NoSuchFileException: unchecked.kt
@@ -57,7 +57,7 @@ Before:
     |        at rm (#22:3)
     |        ...
 
-After:
+**After:**
 
     |  jshell> rm();
     |  Exception java.nio.file.NoSuchFileException: unchecked.kt
