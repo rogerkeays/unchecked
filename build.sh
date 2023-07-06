@@ -36,7 +36,7 @@ done
 echo "\n----- press enter to begin error test cases"; read x
 for JDK in $JDKS; do
     echo $JDK
-    "$JDK"/bin/javac -cp unchecked.jar -d target $WITH_FLUENT TestErrors.java
+    "$JDK"/bin/javac -cp unchecked.jar -d target $WITH_PLUGIN TestErrors.java
     echo "\n----- press enter to continue"; read x
 done
 
