@@ -159,7 +159,7 @@ There is currently no IDE support for *Unchecked*. Contributions are welcome. Ot
   * *Unchecked* may not be compatible with other `javac` plugins, though so far it seems to play nice with Lombok and [Fluent](https://github.com/rogerkeays/fluent), at least.
   * If you are using *Unchecked* with [Fluent](https://github.com/rogerkeays/fluent) on JDK 9 or 10, you must specify the `-Xplugin:fluent` option first.
 
-Please submit issues to the [github issue tracker](https://github.com/rogerkeays/unchecked/issues). Please be sure to include the JDK version and build tools you are using. Before submitted a bug, please try a clean build of your project.
+Please submit issues to the [github issue tracker](https://github.com/rogerkeays/unchecked/issues). Be sure to include the JDK version and build tools you are using. Before submitted a bug, please try a clean build of your project.
 
 ## Related Resources
 
