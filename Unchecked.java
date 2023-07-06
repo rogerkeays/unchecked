@@ -6,6 +6,9 @@ import com.sun.tools.javac.api.*;
 import com.sun.tools.javac.code.*;
 import com.sun.tools.javac.main.JavaCompiler;
 import com.sun.tools.javac.util.*;
+import com.sun.tools.javac.util.JCDiagnostic.DiagnosticPosition;
+import com.sun.tools.javac.util.JCDiagnostic.Warning;
+import com.sun.tools.javac.tree.TreeMaker;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Field;
@@ -27,13 +30,17 @@ public class Unchecked implements Plugin {
             open.invoke(compilerModule, "com.sun.tools.javac.api", unnamedModule);
             open.invoke(compilerModule, "com.sun.tools.javac.comp", unnamedModule);
             open.invoke(compilerModule, "com.sun.tools.javac.main", unnamedModule);
+            open.invoke(compilerModule, "com.sun.tools.javac.tree", unnamedModule);
             open.invoke(compilerModule, "com.sun.tools.javac.util", unnamedModule);
             open.invoke(baseModule, "java.lang", unnamedModule);
 
             // patch extended classes into the compiler context
             Context context = ((BasicJavacTask) task).getContext();
             Object chk = instance(reload(NoCheck.class, context), context);
+            Object log = instance(reload(UncheckedLog.class, context), context);
+            inject(JavaCompiler.class, "log", log, context);
             inject(Flow.class, "chk", chk, context);
+            inject(Flow.class, "log", log, context);
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
@@ -78,7 +85,30 @@ public class Unchecked implements Plugin {
             context.put(checkKey, (Check) null); // superclass constructor will put it back
             return new NoCheck(context);
         }
+
+        // treat all exceptions as unchecked
         @Override boolean isUnchecked(Type t) { return true; }
+    }
+
+    public static class UncheckedLog extends Log {
+        Context context;
+
+        protected UncheckedLog(Context context) {
+            super(context);
+            this.context = context;
+        }
+        public static UncheckedLog instance(Context context) {
+            context.put(logKey, (Log) null); // superclass constructor will put it back
+            return new UncheckedLog(context);
+        }
+
+        // suppress invalid warnings
+        @Override
+        public void warning(DiagnosticPosition pos, Warning warningKey) {
+            if (!warningKey.key().startsWith("compiler.warn.unreachable.catch")) {
+                super.warning(pos, warningKey);
+            }
+        }
     }
 
     @Override public String getName() { return "unchecked"; }
