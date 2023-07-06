@@ -21,8 +21,7 @@ After:
         .map(file -> file + ": " + Files.lines(Paths.get(file)).count())
         .toList();
 
-When you can't handle a checked exception, a common practise is to rethrow it
-as a RuntimeException:
+Before:
 
     public static void rm() {
         try {
@@ -32,7 +31,13 @@ as a RuntimeException:
         }
     }
 
-Which causes a chain of exceptions, nested inside one another:
+After:
+
+    public static void rm() {
+        Files.delete(Paths.get("unchecked.kt"));
+    }
+
+Before:
 
     |  jshell> rm();
     |  Exception java.lang.RuntimeException: java.nio.file.NoSuchFileException: unchecked.kt
@@ -48,11 +53,7 @@ Which causes a chain of exceptions, nested inside one another:
     |        at rm (#22:3)
     |        ...
 
-With *Unchecked*, you can let checked exceptions go back up the call stack. You are not obliged to declare exceptions in the method signature, and the exception stack does not become polluted:
-
-    public static void rm() {
-        Files.delete(Paths.get("unchecked.kt"));
-    }
+After:
 
     |  jshell> rm();
     |  Exception java.nio.file.NoSuchFileException: unchecked.kt
