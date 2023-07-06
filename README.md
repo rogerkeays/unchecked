@@ -106,7 +106,7 @@ And configure the compiler plugin:
             <compilerArgs>
               <arg>-Xplugin:unchecked</arg>
               <arg>-J--add-opens=java.base/jdk.internal.misc=ALL-UNNAMED</arg>
-            </compilerArg>
+            </compilerArgs>
             <fork>true</fork>
             ...
           </configuration>
