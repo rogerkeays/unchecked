@@ -156,7 +156,7 @@ There is currently no IDE support for *Unchecked*. Contributions are welcome. Ot
 
   * *Unchecked* may not be compatible with other `javac` plugins, though so far it seems to play nice with Lombok and [Fluent](https://github.com/rogerkeays/fluent), at least.
 
-Please submit issues to the [github issue tracker](https://github.com/rogerkeays/unchecked/issues).
+Please submit issues to the [github issue tracker](https://github.com/rogerkeays/unchecked/issues). Before submitted a bug, please try a clean build of your project.
 
 ## Related Resources
 
