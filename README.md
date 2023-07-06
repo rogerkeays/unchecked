@@ -127,8 +127,6 @@ Note, older versions of the compiler plugin use a different syntax. Refer to the
     cd unchecked
     ./build.sh
 
-If your operating system doesn't include `sh` it shouldn't be too hard to convert to whatever shell you are using. I mean, we're talking about one java file and a text file here.
-
 ## JDK Support
 
 *Unchecked* is tested with the following JDKs:
@@ -166,4 +164,9 @@ Please submit issues to the [github issue tracker](https://github.com/rogerkeays
   * [Checked exception helper functions](https://github.com/rogerkeays/jamaica-core/blob/master/src/exceptions.java): for when you can't use a compiler plugin.
   * [Fluent](https://github.com/rogerkeays/fluent): a similar compiler plugin to support static extension methods in Java.
   * [More solutions looking for a problem](https://rogerkeays.com)
+
+## Disclaimer
+
+  * *Unchecked* is not supported or endorsed by the OpenJDK team.
+  * The reasonable man adapts himself to the world. The unreasonable one persists in trying to adapt the world to himself. Therefore all progress depends on the unreasonable man. --George Bernard Shaw
 
