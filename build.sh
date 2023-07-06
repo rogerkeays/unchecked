@@ -1,6 +1,6 @@
 #!/bin/sh
 
-VERSION=2.0.0
+VERSION=0.2.0
 TARGET=9
 
 # location of jdk for building
