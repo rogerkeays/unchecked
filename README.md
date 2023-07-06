@@ -149,7 +149,7 @@ There is currently no IDE support for *Unchecked*. Contributions are welcome. Ot
 
 ## Known Issues
 
-  * The compiler will warn about your existing catches being unreachable, though they still work just fine.
+  * Please submit issues to the [github issue tracker](https://github.com/rogerkeays/unchecked/issues).
 
 ## Related Resources
 
