@@ -158,12 +158,12 @@ Please submit issues to the [github issue tracker](https://github.com/rogerkeays
 
 ## Related Resources
 
-  * [kotlin](https://kotlinlang.org): a JVM language which supports extension methods out of the box.
+  * [Kotlin](https://kotlinlang.org): a JVM language which supports extension methods out of the box.
   * [Lombok](https://github.com/projectlombok/lombok): the grand-daddy of `javac` hacks, with various tools for handling checked exceptions.
   * [Manifold](https://manifold.systems): a `javac` plugin with many features, including disabling checked exceptions.
   * [Checked exception helper functions](https://github.com/rogerkeays/jamaica-core/blob/master/src/exceptions.java): for when you can't use a compiler plugin.
   * [Fluent](https://github.com/rogerkeays/fluent): a similar compiler plugin to support static extension methods in Java.
-  * [More solutions looking for a problem](https://rogerkeays.com)
+  * [More solutions looking for a problem](https://rogerkeays.com).
 
 ## Disclaimer
 
