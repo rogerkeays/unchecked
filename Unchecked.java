@@ -5,6 +5,7 @@ import com.sun.source.tree.*;
 import com.sun.tools.javac.api.*;
 import com.sun.tools.javac.code.*;
 import com.sun.tools.javac.main.JavaCompiler;
+import com.sun.tools.javac.processing.JavacProcessingEnvironment;
 import com.sun.tools.javac.util.*;
 import com.sun.tools.javac.util.JCDiagnostic.DiagnosticPosition;
 import com.sun.tools.javac.util.JCDiagnostic.Warning;
@@ -30,17 +31,21 @@ public class Unchecked implements Plugin {
             open.invoke(compilerModule, "com.sun.tools.javac.api", unnamedModule);
             open.invoke(compilerModule, "com.sun.tools.javac.comp", unnamedModule);
             open.invoke(compilerModule, "com.sun.tools.javac.main", unnamedModule);
+            open.invoke(compilerModule, "com.sun.tools.javac.processing", unnamedModule);
             open.invoke(compilerModule, "com.sun.tools.javac.tree", unnamedModule);
             open.invoke(compilerModule, "com.sun.tools.javac.util", unnamedModule);
             open.invoke(baseModule, "java.lang", unnamedModule);
 
-            // patch extended classes into the compiler context
+            // patch extended logger into the compiler context
             Context context = ((BasicJavacTask) task).getContext();
-            Object chk = instance(reload(NoCheck.class, context), context);
             Object log = instance(reload(UncheckedLog.class, context), context);
             inject(JavaCompiler.class, "log", log, context);
-            inject(Flow.class, "chk", chk, context);
             inject(Flow.class, "log", log, context);
+            inject(JavacProcessingEnvironment.class, "log", log, context);
+
+            // patch extended checker into the compiler context
+            Object chk = instance(reload(NoCheck.class, context), context);
+            inject(Flow.class, "chk", chk, context);
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
