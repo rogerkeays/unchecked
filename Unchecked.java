@@ -19,7 +19,7 @@ import jdk.internal.misc.Unsafe;
 
 public class Unchecked implements Plugin {
     @Override
-    public void init(JavacTask task, String... args) {
+    public void init(final JavacTask task, String... args) {
         try {
             // open access to compiler internals, bypassing module restrictions
             Module unnamedModule = Unchecked.class.getModule();
@@ -41,16 +41,26 @@ public class Unchecked implements Plugin {
                 open.invoke(compilerModule, packg, unnamedModule);
             }
             open.invoke(baseModule, "java.lang", unnamedModule);
-
-            // patch extended logger into the compiler context
-            Context context = ((BasicJavacTask) task).getContext();
-            Object log = instance(reload(UncheckedLog.class, context), context);
-            inject(JavaCompiler.class, "log", log, context);
-            inject(Flow.class, "log", log, context);
-            inject(JavacProcessingEnvironment.class, "log", log, context);
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
+
+        // patch extended logger into the compiler context as late as possible
+        task.addTaskListener(new TaskListener() {
+            public void started(TaskEvent e) {
+                if (e.getKind().equals(TaskEvent.Kind.ANALYZE)) {
+                    try {
+                        Context context = ((BasicJavacTask) task).getContext();
+                        Object log = instance(reload(UncheckedLog.class, context), context);
+                        inject(JavaCompiler.class, "log", log, context);
+                        inject(Flow.class, "log", log, context);
+                    } catch (Exception ex) {
+                        throw new RuntimeException(ex);
+                    }
+                }
+            }
+            public void finished(TaskEvent e) {}
+        });
     }
 
     // reload a class using the jdk.compiler classloader
