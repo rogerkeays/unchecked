@@ -1,7 +1,11 @@
 #!/bin/sh
 
+# build configuration
+NAME=unchecked
+CLASSNAME=Unchecked
 VERSION=0.2.0
 TARGET=9
+JAR=$NAME.jar
 
 # location of jdk for building
 [ ! "$JAVA_HOME" ] && JAVA_HOME="$(dirname $(dirname $(readlink -f $(which javac))))"
@@ -10,8 +14,9 @@ TARGET=9
 JDKS="$JAVA_HOME"
 #JDKS="$HOME/tools/jdk-*"
 
-# javac arguments to inject the compiled plugin
-WITH_PLUGIN="-Xplugin:unchecked -J--add-opens=java.base/jdk.internal.misc=ALL-UNNAMED"
+# javac arguments to invoke the compiled plugin
+WITH_PLUGINS="-Xplugin:$NAME -J--add-opens=java.base/jdk.internal.misc=ALL-UNNAMED"
+TEST_CLASSPATH=$JAR
 
 # compile and build jar
 # note: -source 8 is required to import com.sun.tools.javac.*
@@ -19,16 +24,16 @@ echo "===== BUILDING ====="
 echo $JAVA_HOME
 [ -d target ] && rm -r target
 mkdir -p target/META-INF/services
-echo "com.sun.tools.javac.comp.Unchecked" > target/META-INF/services/com.sun.source.util.Plugin
-$JAVA_HOME/bin/javac  -Xlint:deprecation -Xlint:unchecked -nowarn -source 8 -target $TARGET -d target Unchecked.java
+echo "com.sun.tools.javac.comp.$CLASSNAME" > target/META-INF/services/com.sun.source.util.Plugin
+$JAVA_HOME/bin/javac -nowarn -source 8 -target $TARGET -d target $CLASSNAME.java
 [ $? -eq 0 ] || exit 1
-cd target; $JAVA_HOME/bin/jar --create --file ../unchecked.jar *; cd ..
+cd target; $JAVA_HOME/bin/jar --create --file ../$JAR *; cd ..
 
 # test against all jdks
 echo "\n===== TESTING ====="
 for JDK in $JDKS; do
     echo $JDK
-    "$JDK"/bin/javac -Xlint:deprecation -cp unchecked.jar -d target $WITH_PLUGIN TestValid.java
+    "$JDK"/bin/javac -cp $TEST_CLASSPATH -d target $WITH_PLUGINS TestValid.java
     [ $? -eq 0 ] || exit 1
     "$JDK"/bin/java -cp target -enableassertions TestValid
     [ $? -eq 0 ] || exit 1
@@ -36,11 +41,11 @@ done
 echo "\n----- press enter to begin error test cases"; read x
 for JDK in $JDKS; do
     echo $JDK
-    "$JDK"/bin/javac -cp unchecked.jar -d target $WITH_PLUGIN TestErrors.java
+    "$JDK"/bin/javac -cp $TEST_CLASSPATH -d target $WITH_PLUGINS TestErrors.java
     echo "\n----- press enter to continue"; read x
 done
 
 # install using maven
 echo "===== INSTALLING WITH MAVEN ====="
-mvn install:install-file -DgroupId=jamaica -DartifactId=unchecked -Dversion=$VERSION -Dpackaging=jar -Dfile=unchecked.jar
+mvn install:install-file -DgroupId=jamaica -DartifactId=$NAME -Dversion=$VERSION -Dpackaging=jar -Dfile=$JAR
 
