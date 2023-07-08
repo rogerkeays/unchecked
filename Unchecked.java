@@ -4,8 +4,9 @@ import com.sun.source.util.*;
 import com.sun.source.tree.*;
 import com.sun.tools.javac.api.*;
 import com.sun.tools.javac.code.*;
-import com.sun.tools.javac.main.JavaCompiler;
-import com.sun.tools.javac.processing.JavacProcessingEnvironment;
+import com.sun.tools.javac.jvm.*;
+import com.sun.tools.javac.main.*;
+import com.sun.tools.javac.processing.*;
 import com.sun.tools.javac.util.*;
 import com.sun.tools.javac.util.JCDiagnostic.DiagnosticPosition;
 import com.sun.tools.javac.util.JCDiagnostic.Warning;
@@ -30,7 +31,9 @@ public class Unchecked implements Plugin {
             unsafe.putBoolean(open, 12, true); // make implAddOpens public
             for (String packg : new String[] {
                     "com.sun.tools.javac.api",
+                    "com.sun.tools.javac.code",
                     "com.sun.tools.javac.comp",
+                    "com.sun.tools.javac.jvm",
                     "com.sun.tools.javac.main",
                     "com.sun.tools.javac.processing",
                     "com.sun.tools.javac.tree",
@@ -42,31 +45,9 @@ public class Unchecked implements Plugin {
             // patch extended logger into the compiler context
             Context context = ((BasicJavacTask) task).getContext();
             Object log = instance(reload(UncheckedLog.class, context), context);
-            for (Class component : new Class[] {
-                    JavaCompiler.class,
-                    Annotate.class,
-                    Analyzer.class,
-                    ArgumentAttr.class,
-                    Check.class,
-                    DeferredAttr.class,
-                    Enter.class,
-                    Flow.class,
-                    Infer.class,
-                    LambdaToMethod.class,
-                    Lower.class,
-                    Modules.class,
-                    MemberEnter.class,
-                    Operators.class,
-                    Resolve.class,
-                    TypeEnter.class,
-                    TransTypes.class,
-                    JavacProcessingEnvironment.class }) {
-                inject(component, "log", log, context);
-            }
-
-            // patch extended checker into the compiler context
-            Object chk = instance(reload(NoCheck.class, context), context);
-            inject(Flow.class, "chk", chk, context);
+            inject(JavaCompiler.class, "log", log, context);
+            inject(Flow.class, "log", log, context);
+            inject(JavacProcessingEnvironment.class, "log", log, context);
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
@@ -103,19 +84,7 @@ public class Unchecked implements Plugin {
         f.set(instance(klass, context), value);
     }
 
-    public static class NoCheck extends Check {
-        protected NoCheck(Context context) {
-            super(context);
-        }
-        public static NoCheck instance(Context context) {
-            context.put(checkKey, (Check) null);
-            return new NoCheck(context);
-        }
-
-        // treat all exceptions as unchecked
-        @Override boolean isUnchecked(Type t) { return true; }
-    }
-
+    // suppress checked exception errors
     public static class UncheckedLog extends Log {
         Context context;
 
@@ -128,11 +97,12 @@ public class Unchecked implements Plugin {
             return new UncheckedLog(context);
         }
 
-        // suppress invalid warnings
         @Override
-        public void warning(DiagnosticPosition pos, Warning warningKey) {
-            if (!warningKey.key().startsWith("compiler.warn.unreachable.catch")) {
-                super.warning(pos, warningKey);
+        public void report(JCDiagnostic diagnostic) {
+            String key = diagnostic.getCode();
+            if (!key.startsWith("compiler.warn.unreachable.catch") &&
+                    !key.equals("compiler.err.unreported.exception.need.to.catch.or.throw")) {
+                super.report(diagnostic);
             }
         }
     }
