@@ -17,7 +17,7 @@ import java.io.InputStream;
 import jdk.internal.misc.Unsafe;
 
 public class Unchecked implements Plugin {
-    @Override 
+    @Override
     public void init(JavacTask task, String... args) {
         try {
             // open access to compiler internals, bypassing module restrictions
@@ -28,20 +28,41 @@ public class Unchecked implements Plugin {
             Field f = Unsafe.class.getDeclaredField("theUnsafe"); f.setAccessible(true);
             Unsafe unsafe = (Unsafe) f.get(null);
             unsafe.putBoolean(open, 12, true); // make implAddOpens public
-            open.invoke(compilerModule, "com.sun.tools.javac.api", unnamedModule);
-            open.invoke(compilerModule, "com.sun.tools.javac.comp", unnamedModule);
-            open.invoke(compilerModule, "com.sun.tools.javac.main", unnamedModule);
-            open.invoke(compilerModule, "com.sun.tools.javac.processing", unnamedModule);
-            open.invoke(compilerModule, "com.sun.tools.javac.tree", unnamedModule);
-            open.invoke(compilerModule, "com.sun.tools.javac.util", unnamedModule);
+            for (String packg : new String[] {
+                    "com.sun.tools.javac.api",
+                    "com.sun.tools.javac.comp",
+                    "com.sun.tools.javac.main",
+                    "com.sun.tools.javac.processing",
+                    "com.sun.tools.javac.tree",
+                    "com.sun.tools.javac.util"}) {
+                open.invoke(compilerModule, packg, unnamedModule);
+            }
             open.invoke(baseModule, "java.lang", unnamedModule);
 
             // patch extended logger into the compiler context
             Context context = ((BasicJavacTask) task).getContext();
             Object log = instance(reload(UncheckedLog.class, context), context);
-            inject(JavaCompiler.class, "log", log, context);
-            inject(Flow.class, "log", log, context);
-            inject(JavacProcessingEnvironment.class, "log", log, context);
+            for (Class component : new Class[] {
+                    JavaCompiler.class,
+                    Annotate.class,
+                    Analyzer.class,
+                    ArgumentAttr.class,
+                    Check.class,
+                    DeferredAttr.class,
+                    Enter.class,
+                    Flow.class,
+                    Infer.class,
+                    LambdaToMethod.class,
+                    Lower.class,
+                    Modules.class,
+                    MemberEnter.class,
+                    Operators.class,
+                    Resolve.class,
+                    TypeEnter.class,
+                    TransTypes.class,
+                    JavacProcessingEnvironment.class }) {
+                inject(component, "log", log, context);
+            }
 
             // patch extended checker into the compiler context
             Object chk = instance(reload(NoCheck.class, context), context);
@@ -63,7 +84,7 @@ public class Unchecked implements Plugin {
                 String.class, byte[].class, int.class, int.class });
         defineClass.setAccessible(true);
         try {
-            return (Class) defineClass.invoke(JavaCompiler.class.getClassLoader(), 
+            return (Class) defineClass.invoke(JavaCompiler.class.getClassLoader(),
                     klass.getName(), bytes, 0, bytes.length);
         } catch (InvocationTargetException e) {
             return klass; // jshell hack: class already reloaded, but no way to tell
@@ -87,7 +108,7 @@ public class Unchecked implements Plugin {
             super(context);
         }
         public static NoCheck instance(Context context) {
-            context.put(checkKey, (Check) null); // superclass constructor will put it back
+            context.put(checkKey, (Check) null);
             return new NoCheck(context);
         }
 
@@ -103,7 +124,7 @@ public class Unchecked implements Plugin {
             this.context = context;
         }
         public static UncheckedLog instance(Context context) {
-            context.put(logKey, (Log) null); // superclass constructor will put it back
+            context.put(logKey, (Log) null);
             return new UncheckedLog(context);
         }
 
