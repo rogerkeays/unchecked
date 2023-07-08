@@ -68,6 +68,13 @@ public class TestValid {
         try { ((Runnable) () -> declaredException()).run(); } catch (Exception e) {};
         try { ((Runnable) () -> undeclaredException()).run(); } catch (Exception e) {};
         try { ((Callable) () -> { throw new Exception(); }).call(); } catch (Exception e) {};
+
+        // function as an anonymous class
+    	assert new Function<String, String>() {
+    		@Override public String apply(String name) {
+    			return "hello " + name;
+    		}
+    	}.apply("world").equals("hello world");
     }
 
     private static int one() { return 1; }
