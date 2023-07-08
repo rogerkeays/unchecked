@@ -69,7 +69,7 @@ public class TestValid {
         try { ((Runnable) () -> undeclaredException()).run(); } catch (Exception e) {};
         try { ((Callable) () -> { throw new Exception(); }).call(); } catch (Exception e) {};
 
-        // function as an anonymous class
+        // function as an anonymous class, no exceptions
     	assert new Function<String, String>() {
     		@Override public String apply(String name) {
     			return "hello " + name;
