@@ -78,16 +78,16 @@ public class Unchecked implements Plugin {
         }
     }
 
-    // get the singleton of a class for a given context
-    Object instance(Class<?> klass, Context context) throws Exception {
-        return klass.getDeclaredMethod("instance", Context.class).invoke(null, context);
-    }
-
     // use reflection to inject components into final/private fields
     void inject(Class klass, String field, Object value, Context context) throws Exception {
         Field f = klass.getDeclaredField(field);
         f.setAccessible(true);
         f.set(instance(klass, context), value);
+    }
+
+    // get the singleton of a class for a given context
+    Object instance(Class<?> klass, Context context) throws Exception {
+        return klass.getDeclaredMethod("instance", Context.class).invoke(null, context);
     }
 
     public static class UncheckedLog extends Log {
