@@ -9,8 +9,10 @@ TARGET=9
 PACKAGE=jamaica.unchecked
 CLASSNAME=Unchecked
 JAR=$NAME.jar
-TEST_CLASSPATH=$JAR
+PLUGIN=-Xplugin:unchecked
+#PLUGIN=-Xplugin:"unchecked nowarn"
 TEST_OPTS=-J--add-opens=java.base/java.lang=ALL-UNNAMED 
+TEST_CLASSPATH=$JAR
 
 # location of jdk for building
 [ ! "$JAVA_HOME" ] && JAVA_HOME="$(dirname $(dirname $(readlink -f $(which javac))))"
@@ -35,7 +37,7 @@ echo "\n===== TESTING ====="
 echo "\n----- press enter to begin warning test cases"; read x
 for JDK in $JDKS; do
     echo $JDK
-    "$JDK"/bin/javac -cp $TEST_CLASSPATH -d target -Xplugin:$NAME $TEST_OPTS TestWarnings.java
+    "$JDK"/bin/javac -cp $TEST_CLASSPATH -d target "$PLUGIN" $TEST_OPTS TestWarnings.java
     [ $? -eq 0 ] || exit 1
     "$JDK"/bin/java -cp target -enableassertions TestWarnings
     [ $? -eq 0 ] || exit 1
@@ -43,7 +45,7 @@ done
 echo "\n----- press enter to begin error test cases"; read x
 for JDK in $JDKS; do
     echo $JDK
-    "$JDK"/bin/javac -cp $TEST_CLASSPATH -d target -Xplugin:$NAME $TEST_OPTS TestErrors.java
+    "$JDK"/bin/javac -cp $TEST_CLASSPATH -d target "$PLUGIN" $TEST_OPTS TestErrors.java
 done
 
 # install using maven
