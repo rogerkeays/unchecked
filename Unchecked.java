@@ -56,7 +56,6 @@ public class Unchecked implements Plugin {
                     LambdaToMethod.class,
                     Lower.class,
                     Modules.class,
-                    MatchBindingsComputer.class,
                     MemberEnter.class,
                     Operators.class,
                     Resolve.class,
