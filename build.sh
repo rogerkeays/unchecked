@@ -34,7 +34,7 @@ cd target; $JAVA_HOME/bin/jar --create --file ../$JAR *; cd ..
 
 # test against all jdks
 echo "\n===== TESTING ====="
-echo "\n----- press enter to begin warning test cases"; read x
+echo "----- press enter to run warning test cases"; read x
 for JDK in $JDKS; do
     echo $JDK
     "$JDK"/bin/javac -cp $TEST_CLASSPATH -d target "$PLUGIN" $TEST_OPTS TestWarnings.java
@@ -42,14 +42,14 @@ for JDK in $JDKS; do
     "$JDK"/bin/java -cp target -enableassertions TestWarnings
     [ $? -eq 0 ] || exit 1
 done
-echo "\n----- press enter to begin error test cases"; read x
+echo "\n----- press enter to run error test cases"; read x
 for JDK in $JDKS; do
     echo $JDK
     "$JDK"/bin/javac -cp $TEST_CLASSPATH -d target "$PLUGIN" $TEST_OPTS TestErrors.java
 done
 
 # install using maven
-echo "===== INSTALLING WITH MAVEN ====="
-echo "\n----- press enter to install using maven"; read x
+echo "\n===== INSTALLING WITH MAVEN ====="
+echo "----- press enter to install using maven"; read x
 mvn install:install-file -DgroupId=$GROUP -DartifactId=$NAME -Dversion=$VERSION -Dpackaging=jar -Dfile=$JAR
 
