@@ -176,6 +176,7 @@ To ensure backwards compatibility with existing code, *Unchecked* has been used 
   * [Apache Commons Lang](https://github.com/apache/commons-lang)
   * [iText](https://github.com/itext/itext7)
   * [Tomcat](https://github.com/apache/tomcat)
+  * [Hibernate](https://github.com/hibernate/hibernate-orm)
 
 ## IDE Support
 
