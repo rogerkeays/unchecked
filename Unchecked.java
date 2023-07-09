@@ -46,7 +46,7 @@ public class Unchecked implements Plugin {
                         // patch into the compiler context
                         Context context = ((BasicJavacTask) task).getContext();
                         Object log = reload(UncheckedLog.class, context)
-                                .getDeclaredMethod("instance", Context.class, boolean.class)
+                                .getDeclaredMethod("create", Context.class, boolean.class)
                                 .invoke(null, context, warn);
                         inject(JavaCompiler.class, "log", log, context);
                         inject(Flow.class, "log", log, context);
@@ -97,7 +97,7 @@ public class Unchecked implements Plugin {
             super(context);
             this.warn = warn;
         }
-        public static UncheckedLog instance(Context context, boolean warn) {
+        public static UncheckedLog create(Context context, boolean warn) {
             context.put(logKey, (Log) null);
             return new UncheckedLog(context, warn);
         }
