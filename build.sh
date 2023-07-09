@@ -2,6 +2,7 @@
 
 # build configuration
 NAME=unchecked
+PACKAGE=jamaica.unchecked
 CLASSNAME=Unchecked
 VERSION=0.2.0
 TARGET=9
@@ -21,7 +22,7 @@ echo "===== BUILDING ====="
 echo $JAVA_HOME
 [ -d target ] && rm -r target
 mkdir -p target/META-INF/services
-echo "com.sun.tools.javac.comp.$CLASSNAME" > target/META-INF/services/com.sun.source.util.Plugin
+echo "$PACKAGE.$CLASSNAME" > target/META-INF/services/com.sun.source.util.Plugin
 $JAVA_HOME/bin/javac -Xlint:unchecked -nowarn -source 8 -target $TARGET -d target $CLASSNAME.java
 [ $? -eq 0 ] || exit 1
 cd target; $JAVA_HOME/bin/jar --create --file ../$JAR *; cd ..

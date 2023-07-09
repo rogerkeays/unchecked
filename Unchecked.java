@@ -1,8 +1,9 @@
-package com.sun.tools.javac.comp;
+package jamaica.unchecked;
 
 import com.sun.source.util.*;
 import com.sun.source.tree.*;
 import com.sun.tools.javac.api.*;
+import com.sun.tools.javac.comp.*;
 import com.sun.tools.javac.main.*;
 import com.sun.tools.javac.util.*;
 import com.sun.tools.javac.util.JCDiagnostic.*;
