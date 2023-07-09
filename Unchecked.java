@@ -103,9 +103,9 @@ public class Unchecked implements Plugin {
                 ((UncheckedLog) current).warn = warn;
                 return (UncheckedLog) current;
             } else {
+                // superclass constructor will register the singleton
                 context.put(logKey, (Log) null);
                 return new UncheckedLog(context, warn);
-                // note: superclass constructor will register the singleton
             } 
         }
 
@@ -125,3 +125,4 @@ public class Unchecked implements Plugin {
 
     @Override public String getName() { return "unchecked"; }
 }
+
