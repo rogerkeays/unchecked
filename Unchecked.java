@@ -3,13 +3,9 @@ package com.sun.tools.javac.comp;
 import com.sun.source.util.*;
 import com.sun.source.tree.*;
 import com.sun.tools.javac.api.*;
-import com.sun.tools.javac.code.*;
-import com.sun.tools.javac.jvm.*;
 import com.sun.tools.javac.main.*;
-import com.sun.tools.javac.processing.*;
 import com.sun.tools.javac.util.*;
 import com.sun.tools.javac.util.JCDiagnostic.*;
-import com.sun.tools.javac.tree.TreeMaker;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Field;
@@ -31,12 +27,8 @@ public class Unchecked implements Plugin {
             unsafe.putBoolean(open, 12, true); // make implAddOpens public
             for (String packg : new String[] {
                     "com.sun.tools.javac.api",
-                    "com.sun.tools.javac.code",
                     "com.sun.tools.javac.comp",
-                    "com.sun.tools.javac.jvm",
                     "com.sun.tools.javac.main",
-                    "com.sun.tools.javac.processing",
-                    "com.sun.tools.javac.tree",
                     "com.sun.tools.javac.util"}) {
                 open.invoke(compilerModule, packg, unnamedModule);
             }
