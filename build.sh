@@ -44,10 +44,10 @@ echo "\n----- press enter to begin error test cases"; read x
 for JDK in $JDKS; do
     echo $JDK
     "$JDK"/bin/javac -cp $TEST_CLASSPATH -d target -Xplugin:$NAME $TEST_OPTS TestErrors.java
-    echo "\n----- press enter to continue"; read x
 done
 
 # install using maven
 echo "===== INSTALLING WITH MAVEN ====="
+echo "\n----- press enter to install using maven"; read x
 mvn install:install-file -DgroupId=$GROUP -DartifactId=$NAME -Dversion=$VERSION -Dpackaging=jar -Dfile=$JAR
 
