@@ -52,7 +52,7 @@ public class Unchecked implements Plugin {
                                    " is not a valid plugin parameter");
                         }
 
-                        // patch into the compiler state
+                        // patch into the compiler context
                         Context context = ((BasicJavacTask) task).getContext();
                         Object log = reload(UncheckedLog.class, context)
                                 .getDeclaredMethod("instance", Context.class, boolean.class)
