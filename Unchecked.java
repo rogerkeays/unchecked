@@ -45,7 +45,7 @@ public class Unchecked implements Plugin {
             throw new RuntimeException(e);
         }
 
-        // patch extended logger into the compiler context as late as possible
+        // patch compiler as late as possible to avoid breaking state
         task.addTaskListener(new TaskListener() {
             public void started(TaskEvent e) {
                 if (e.getKind().equals(TaskEvent.Kind.ANALYZE)) {
@@ -75,7 +75,7 @@ public class Unchecked implements Plugin {
         });
     }
 
-    // reload a class using the jdk.compiler classloader
+    // reload a declared class using the jdk.compiler classloader
     // this is necessary to be considered part of the same package
     // otherwise we cannot override package/protected methods
     Class<?> reload(Class klass, Context context) throws Exception {
@@ -120,14 +120,14 @@ public class Unchecked implements Plugin {
 
         // convert checked exception errors to warnings, or suppress
         @Override
-        public void report(JCDiagnostic it) {
-            if (it.getCode().startsWith("compiler.err.unreported.exception")) {
+        public void report(JCDiagnostic diag) {
+            if (diag.getCode().startsWith("compiler.err.unreported.exception")) {
                 if (warn) {
-                    rawWarning((int) it.getPosition(), "warning: unreported exception " + 
-                          it.getArgs()[0] + " not caught or declared to be thrown");
+                    rawWarning((int) diag.getPosition(), "warning: unreported exception " + 
+                          diag.getArgs()[0] + " not caught or declared to be thrown");
                 }
             } else {
-                super.report(it);
+                super.report(diag);
             }
         }
     }
