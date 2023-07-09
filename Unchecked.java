@@ -8,8 +8,7 @@ import com.sun.tools.javac.jvm.*;
 import com.sun.tools.javac.main.*;
 import com.sun.tools.javac.processing.*;
 import com.sun.tools.javac.util.*;
-import com.sun.tools.javac.util.JCDiagnostic.DiagnosticPosition;
-import com.sun.tools.javac.util.JCDiagnostic.Warning;
+import com.sun.tools.javac.util.JCDiagnostic.*;
 import com.sun.tools.javac.tree.TreeMaker;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -18,8 +17,9 @@ import java.io.InputStream;
 import jdk.internal.misc.Unsafe;
 
 public class Unchecked implements Plugin {
+
     @Override
-    public void init(final JavacTask task, String... args) {
+    public void init(final JavacTask task, final String... args) {
         try {
             // open access to compiler internals, bypassing module restrictions
             Module unnamedModule = Unchecked.class.getModule();
@@ -50,8 +50,20 @@ public class Unchecked implements Plugin {
             public void started(TaskEvent e) {
                 if (e.getKind().equals(TaskEvent.Kind.ANALYZE)) {
                     try {
+                        // check for nowarn parameter
+                        boolean warn = true;
+                        if (args.length > 0 && args[0].equals("nowarn")) {
+                            warn = false;
+                        } else if (args.length > 0) {
+                            throw new IllegalArgumentException(args[0] + 
+                                   " is not a valid plugin parameter");
+                        }
+
+                        // patch into the compiler state
                         Context context = ((BasicJavacTask) task).getContext();
-                        Object log = instance(reload(UncheckedLog.class, context), context);
+                        Class<?> klass = reload(UncheckedLog.class, context);
+                        Object log = klass.getDeclaredMethod("instance", Context.class, boolean.class)
+                                .invoke(null, context, warn);
                         inject(JavaCompiler.class, "log", log, context);
                         inject(Flow.class, "log", log, context);
                     } catch (Exception ex) {
@@ -94,25 +106,28 @@ public class Unchecked implements Plugin {
         f.set(instance(klass, context), value);
     }
 
-    // suppress checked exception errors
     public static class UncheckedLog extends Log {
-        Context context;
+        boolean warn = true;
 
-        protected UncheckedLog(Context context) {
+        protected UncheckedLog(Context context, boolean warn) {
             super(context);
-            this.context = context;
+            this.warn = warn;
         }
-        public static UncheckedLog instance(Context context) {
+        public static UncheckedLog instance(Context context, boolean warn) {
             context.put(logKey, (Log) null);
-            return new UncheckedLog(context);
+            return new UncheckedLog(context, warn);
         }
 
+        // convert checked exception errors to warnings, or suppress
         @Override
-        public void report(JCDiagnostic diagnostic) {
-            String key = diagnostic.getCode();
-            if (!key.startsWith("compiler.warn.unreachable.catch") &&
-                    !key.equals("compiler.err.unreported.exception.need.to.catch.or.throw")) {
-                super.report(diagnostic);
+        public void report(JCDiagnostic it) {
+            if (it.getCode().startsWith("compiler.err.unreported.exception")) {
+                if (warn) {
+                    rawWarning((int) it.getPosition(), "warning: unreported exception " + 
+                          it.getArgs()[0] + " not caught or declared to be thrown");
+                }
+            } else {
+                super.report(it);
             }
         }
     }

@@ -70,7 +70,23 @@ The problem with wrapping checked exceptions, apart from the code pollution, is 
     |        at rm (#20:3)
     |        at (#21:1)
 
-*Unchecked* is invoked as a compiler plugin and has no runtime dependencies.
+*Unchecked* works by patching `javac` to convert checked exception errors to warnings.
+
+**Before:**
+
+    TestValid.java:42: error: unreported exception UnsupportedEncodingException; must be caught or declared to be thrown
+            assert new String(STARS, "UTF-8").equals("***");
+                   ^
+    1 errors
+
+**After:**
+
+    TestValid.java:42: warning: unreported exception java.io.UnsupportedEncodingException not caught or decalared to be thrown
+            assert new String(STARS, "UTF-8").equals("***");
+               ^
+    1 warnings
+
+*Unchecked* is invoked as a compiler plugin and has no runtime dependencies. Warnings can be suppressed with the `nowarn` option.
 
 ## Quick Start
 
@@ -82,6 +98,10 @@ Download the jar, place it on your classpath, and run `javac` with `-Xplugin:unc
 Run your code like you always have:
 
     java Test
+
+To add the `nowarn` parameter, use this syntax:
+
+    -Xplugin:"unchecked nowarn"
 
 ## Install Using Maven
 
@@ -118,6 +138,10 @@ And configure the compiler plugin:
         </plugin>
 
 Note, older versions of the compiler plugin use a different syntax. Refer to the [Maven Compiler Plugin docs](https://maven.apache.org/plugins/maven-compiler-plugin/compile-mojo.html) for more details. Make sure you add the `<fork>true</fork>` option too.
+
+To add the `nowarn` parameter, use this syntax:
+
+    <arg>-Xplugin:"unchecked nowarn"</arg>
 
 ## Build It Yourself
 
