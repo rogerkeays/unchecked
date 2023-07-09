@@ -1,11 +1,13 @@
 #!/bin/sh
 
 # build configuration
+GROUP=jamaica
 NAME=unchecked
-PACKAGE=jamaica.unchecked
-CLASSNAME=Unchecked
 VERSION=0.2.0
 TARGET=9
+
+PACKAGE=jamaica.unchecked
+CLASSNAME=Unchecked
 JAR=$NAME.jar
 TEST_CLASSPATH=$JAR
 
@@ -45,5 +47,5 @@ done
 
 # install using maven
 echo "===== INSTALLING WITH MAVEN ====="
-mvn install:install-file -DgroupId=jamaica -DartifactId=$NAME -Dversion=$VERSION -Dpackaging=jar -Dfile=$JAR
+mvn install:install-file -DgroupId=$GROUP -DartifactId=$NAME -Dversion=$VERSION -Dpackaging=jar -Dfile=$JAR
 
