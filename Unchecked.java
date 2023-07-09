@@ -61,8 +61,8 @@ public class Unchecked implements Plugin {
 
                         // patch into the compiler state
                         Context context = ((BasicJavacTask) task).getContext();
-                        Class<?> klass = reload(UncheckedLog.class, context);
-                        Object log = klass.getDeclaredMethod("instance", Context.class, boolean.class)
+                        Object log = reload(UncheckedLog.class, context)
+                                .getDeclaredMethod("instance", Context.class, boolean.class)
                                 .invoke(null, context, warn);
                         inject(JavaCompiler.class, "log", log, context);
                         inject(Flow.class, "log", log, context);
@@ -78,7 +78,7 @@ public class Unchecked implements Plugin {
     // reload a class using the jdk.compiler classloader
     // this is necessary to be considered part of the same package
     // otherwise we cannot override package/protected methods
-    Class reload(Class klass, Context context) throws Exception {
+    Class<?> reload(Class klass, Context context) throws Exception {
         InputStream is = Unchecked.class.getClassLoader().getResourceAsStream(
                 klass.getName().replace('.', '/') + ".class");
         byte[] bytes = new byte[is.available()];
