@@ -3,7 +3,7 @@ import java.io.*;
 import java.util.function.*;
 import java.util.concurrent.Callable;
 
-public class TestValid {
+public class TestWarnings {
     private static final byte[] STARS = new byte[] { 42, 42, 42 };
 
     public static void main(String [] args) {
