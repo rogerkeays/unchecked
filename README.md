@@ -87,10 +87,10 @@ When you can't handle a checked exception, a common practise is to rethrow it as
 
 ## Quick Start
 
-Download the jar, place it on your classpath, and run `javac` with `-Xplugin:unchecked` and `-J--add-opens=java.base/jdk.internal.misc=ALL-UNNAMED`:
+Download the jar, place it on your classpath, and run `javac` with `-Xplugin:unchecked` and `-J--add-opens=java.base/java.lang=ALL-UNNAMED`:
 
     wget https://github.com/rogerkeays/unchecked/raw/main/unchecked.jar
-    javac -cp unchecked.jar -Xplugin:unchecked -J--add-opens=java.base/jdk.internal.misc=ALL-UNNAMED Test.java
+    javac -cp unchecked.jar -Xplugin:unchecked -J--add-opens=java.base/java.lang=ALL-UNNAMED Test.java
 
 Run your code like you always have:
 
@@ -127,7 +127,7 @@ And configure the compiler plugin:
           <configuration>
             <compilerArgs>
               <arg>-Xplugin:unchecked</arg>
-              <arg>-J--add-opens=java.base/jdk.internal.misc=ALL-UNNAMED</arg>
+              <arg>-J--add-opens=java.base/java.lang=ALL-UNNAMED</arg>
             </compilerArgs>
             <fork>true</fork>
             ...

@@ -6,34 +6,25 @@ import com.sun.tools.javac.api.*;
 import com.sun.tools.javac.comp.*;
 import com.sun.tools.javac.main.*;
 import com.sun.tools.javac.util.*;
-import com.sun.tools.javac.util.JCDiagnostic.*;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
-import java.lang.reflect.Field;
+import java.lang.reflect.*;
 import java.io.InputStream;
-import jdk.internal.misc.Unsafe;
 
 public class Unchecked implements Plugin {
 
     @Override
     public void init(final JavacTask task, final String... args) {
         try {
-            // open access to compiler internals, bypassing module restrictions
+            // open access to the compiler packages
+            // requires -J--add-opens=java.base/java.lang=ALL-UNNAMED
             Module unnamedModule = Unchecked.class.getModule();
             Module compilerModule = ModuleLayer.boot().findModule("jdk.compiler").get();
             Module baseModule = ModuleLayer.boot().findModule("java.base").get();
-            Method open = Module.class.getDeclaredMethod("implAddOpens", String.class, Module.class);
-            Field f = Unsafe.class.getDeclaredField("theUnsafe"); f.setAccessible(true);
-            Unsafe unsafe = (Unsafe) f.get(null);
-            unsafe.putBoolean(open, 12, true); // make implAddOpens public
-            for (String packg : new String[] {
-                    "com.sun.tools.javac.api",
-                    "com.sun.tools.javac.comp",
-                    "com.sun.tools.javac.main",
-                    "com.sun.tools.javac.util"}) {
-                open.invoke(compilerModule, packg, unnamedModule);
-            }
-            open.invoke(baseModule, "java.lang", unnamedModule);
+            Method opener = Module.class.getDeclaredMethod("implAddOpens", String.class, Module.class);
+            opener.setAccessible(true);
+            opener.invoke(compilerModule, "com.sun.tools.javac.api", unnamedModule);
+            opener.invoke(compilerModule, "com.sun.tools.javac.comp", unnamedModule);
+            opener.invoke(compilerModule, "com.sun.tools.javac.main", unnamedModule);
+            opener.invoke(compilerModule, "com.sun.tools.javac.util", unnamedModule);
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
