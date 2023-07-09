@@ -48,12 +48,16 @@ When you can't handle a checked exception, a common practise is to rethrow it as
                    ^
     1 errors
 
+    BUILD FAILURE
+
 **After:**
 
     TestValid.java:42: warning: unreported exception java.io.UnsupportedEncodingException not caught or decalared to be thrown
             assert new String(STARS, "UTF-8").equals("***");
                ^
     1 warnings
+
+    BUILD SUCCESS
 
 *Unchecked* does not make any changes to your bytecode. This is possible because the JVM does not know about checked exceptions. It's been the compiler holding you back all this time.
 
