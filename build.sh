@@ -31,11 +31,12 @@ cd target; $JAVA_HOME/bin/jar --create --file ../$JAR *; cd ..
 
 # test against all jdks
 echo "\n===== TESTING ====="
+echo "\n----- press enter to begin warning test cases"; read x
 for JDK in $JDKS; do
     echo $JDK
-    "$JDK"/bin/javac -cp $TEST_CLASSPATH -d target -Xplugin:$NAME -J--add-opens=java.base/jdk.internal.misc=ALL-UNNAMED TestValid.java
+    "$JDK"/bin/javac -cp $TEST_CLASSPATH -d target -Xplugin:$NAME -J--add-opens=java.base/jdk.internal.misc=ALL-UNNAMED TestWarnings.java
     [ $? -eq 0 ] || exit 1
-    "$JDK"/bin/java -cp target -enableassertions TestValid
+    "$JDK"/bin/java -cp target -enableassertions TestWarnings
     [ $? -eq 0 ] || exit 1
 done
 echo "\n----- press enter to begin error test cases"; read x
