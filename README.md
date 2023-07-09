@@ -21,7 +21,7 @@ unchecked.
         .map(file -> file + ": " + Files.lines(Paths.get(file)).count())
         .toList();
 
-When you can't handle a checked exception, a common practise is to rethrow it as a RuntimeException. With *Unchecked*, this is no longer necessary. The exception will just be passed back up the call stack.
+When you can't handle a checked exception, a common practise is to rethrow it as a RuntimeException. The problem with this, apart from the code pollution, is that the root cause of exceptions get hidden, and sometimes lost if developers forget to retain it. With *Unchecked*, wrapping checked exceptions is longer necessary. The exception will just be passed back up the call stack.
 
 **Before:**
 
@@ -39,38 +39,7 @@ When you can't handle a checked exception, a common practise is to rethrow it as
         Files.delete(Paths.get("unchecked.kt"));
     }
 
-The problem with wrapping checked exceptions, apart from the code pollution, is that the root cause of exceptions get hidden, and sometimes lost if developers forget to retain it.
-
-**Before:**
-
-    |  jshell> rm();
-    |  Exception java.lang.RuntimeException: java.nio.file.NoSuchFileException: unchecked.kt
-    |        at rm (#22:5)
-    |        at (#23:1)
-    |  Caused by: java.nio.file.NoSuchFileException: unchecked.kt
-    |        at UnixException.translateToIOException (UnixException.java:92)
-    |        at UnixException.rethrowAsIOException (UnixException.java:106)
-    |        at UnixException.rethrowAsIOException (UnixException.java:111)
-    |        at UnixFileSystemProvider.implDelete (UnixFileSystemProvider.java:248)
-    |        at AbstractFileSystemProvider.delete (AbstractFileSystemProvider.java:105)
-    |        at Files.delete (Files.java:1152)
-    |        at rm (#22:3)
-    |        ...
-
-**After:**
-
-    |  jshell> rm();
-    |  Exception java.nio.file.NoSuchFileException: unchecked.kt
-    |        at UnixException.translateToIOException (UnixException.java:92)
-    |        at UnixException.rethrowAsIOException (UnixException.java:106)
-    |        at UnixException.rethrowAsIOException (UnixException.java:111)
-    |        at UnixFileSystemProvider.implDelete (UnixFileSystemProvider.java:248)
-    |        at AbstractFileSystemProvider.delete (AbstractFileSystemProvider.java:105)
-    |        at Files.delete (Files.java:1152)
-    |        at rm (#20:3)
-    |        at (#21:1)
-
-*Unchecked* works by patching `javac` to convert checked exception errors to warnings.
+*Unchecked* works by converting checked exception errors to warnings.
 
 **Before:**
 
