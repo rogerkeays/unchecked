@@ -55,6 +55,34 @@ When you can't handle a checked exception, a common practise is to rethrow it as
                ^
     1 warnings
 
+*Unchecked* does not make any changes to your bytecode. This is possible because the JVM does not know about checked exceptions. It's been the compiler holding you back all this time.
+
+**Before:**
+
+    $ ls -o target/classes/org/apache/commons/lang3/stream/
+    -rw-r--r--  620 Jul  8 23:42  IntStreams.class
+    -rw-r--r--  254 Jul  8 23:42 'LangCollectors$1.class'
+    -rw-r--r-- 3262 Jul  8 23:42 'LangCollectors$SimpleCollector.class'
+    -rw-r--r-- 5223 Jul  8 23:42  LangCollectors.class
+    -rw-r--r--  137 Jul  8 23:42  package-info.class
+    -rw-r--r-- 3841 Jul  8 23:42 'Streams$ArrayCollector.class'
+    -rw-r--r-- 2036 Jul  8 23:42 'Streams$EnumerationSpliterator.class'
+    -rw-r--r-- 5314 Jul  8 23:42 'Streams$FailableStream.class'
+    -rw-r--r-- 6395 Jul  8 23:42  Streams.class
+
+**After:**
+
+    $ ls -o target/classes/org/apache/commons/lang3/stream/
+    -rw-r--r--  620 Jul  8 23:49  IntStreams.class
+    -rw-r--r--  254 Jul  8 23:49 'LangCollectors$1.class'
+    -rw-r--r-- 3262 Jul  8 23:49 'LangCollectors$SimpleCollector.class'
+    -rw-r--r-- 5223 Jul  8 23:49  LangCollectors.class
+    -rw-r--r--  137 Jul  8 23:49  package-info.class
+    -rw-r--r-- 3841 Jul  8 23:49 'Streams$ArrayCollector.class'
+    -rw-r--r-- 2036 Jul  8 23:49 'Streams$EnumerationSpliterator.class'
+    -rw-r--r-- 5314 Jul  8 23:49 'Streams$FailableStream.class'
+    -rw-r--r-- 6395 Jul  8 23:49  Streams.class
+
 *Unchecked* is invoked as a compiler plugin and has no runtime dependencies. Warnings can be suppressed with the `nowarn` option.
 
 ## Quick Start
