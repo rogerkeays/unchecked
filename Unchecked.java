@@ -5,6 +5,7 @@ import com.sun.source.tree.*;
 import com.sun.tools.javac.api.*;
 import com.sun.tools.javac.comp.*;
 import com.sun.tools.javac.main.*;
+import com.sun.tools.javac.processing.*;
 import com.sun.tools.javac.util.*;
 import java.lang.reflect.*;
 import java.io.InputStream;
@@ -24,39 +25,49 @@ public class Unchecked implements Plugin {
             opener.invoke(compilerModule, "com.sun.tools.javac.api", unnamedModule);
             opener.invoke(compilerModule, "com.sun.tools.javac.comp", unnamedModule);
             opener.invoke(compilerModule, "com.sun.tools.javac.main", unnamedModule);
+            opener.invoke(compilerModule, "com.sun.tools.javac.processing", unnamedModule);
             opener.invoke(compilerModule, "com.sun.tools.javac.util", unnamedModule);
+
+            // check for nowarn parameter
+            boolean warn = true;
+            if (args.length > 0 && args[0].equals("nowarn")) {
+                warn = false;
+            } else if (args.length > 0) {
+                throw new IllegalArgumentException(args[0] +
+                       " is not a valid plugin parameter");
+            }
+
+            // patch into the compiler context
+            Context context = ((BasicJavacTask) task).getContext();
+            Object log = reload(UncheckedLog.class, context)
+                    .getDeclaredMethod("instance", Context.class, boolean.class)
+                    .invoke(null, context, warn);
+            for (Class component : new Class[] {
+                    JavaCompiler.class,
+                    Annotate.class,
+                    Analyzer.class,
+                    ArgumentAttr.class,
+                    Attr.class,
+                    Check.class,
+                    DeferredAttr.class,
+                    Enter.class,
+                    Flow.class,
+                    Infer.class,
+                    LambdaToMethod.class,
+                    Lower.class,
+                    Modules.class,
+                    MatchBindingsComputer.class,
+                    MemberEnter.class,
+                    Operators.class,
+                    Resolve.class,
+                    TypeEnter.class,
+                    TransTypes.class,
+                    JavacProcessingEnvironment.class }) {
+                inject(component, "log", log, context);
+            }
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
-
-        // patch compiler as late as possible to avoid breaking state
-        task.addTaskListener(new TaskListener() {
-            public void started(TaskEvent e) {
-                if (e.getKind().equals(TaskEvent.Kind.ANALYZE)) {
-                    try {
-                        // check for nowarn parameter
-                        boolean warn = true;
-                        if (args.length > 0 && args[0].equals("nowarn")) {
-                            warn = false;
-                        } else if (args.length > 0) {
-                            throw new IllegalArgumentException(args[0] + 
-                                   " is not a valid plugin parameter");
-                        }
-
-                        // patch into the compiler context
-                        Context context = ((BasicJavacTask) task).getContext();
-                        Object log = reload(UncheckedLog.class, context)
-                                .getDeclaredMethod("instance", Context.class, boolean.class)
-                                .invoke(null, context, warn);
-                        inject(JavaCompiler.class, "log", log, context);
-                        inject(Flow.class, "log", log, context);
-                    } catch (Exception ex) {
-                        throw new RuntimeException(ex);
-                    }
-                }
-            }
-            public void finished(TaskEvent e) {}
-        });
     }
 
     // reload a declared class using the jdk.compiler classloader
@@ -97,6 +108,7 @@ public class Unchecked implements Plugin {
             super(context);
             this.warn = warn;
         }
+
         public static UncheckedLog instance(Context context, boolean warn) {
             Log current = (Log) context.get(logKey);
             if (current != null && current instanceof UncheckedLog) {
@@ -106,7 +118,7 @@ public class Unchecked implements Plugin {
                 // superclass constructor will register the singleton
                 context.put(logKey, (Log) null);
                 return new UncheckedLog(context, warn);
-            } 
+            }
         }
 
         // convert checked exception errors to warnings, or suppress
@@ -114,7 +126,7 @@ public class Unchecked implements Plugin {
         public void report(JCDiagnostic diag) {
             if (diag.getCode().startsWith("compiler.err.unreported.exception")) {
                 if (warn) {
-                    rawWarning((int) diag.getPosition(), "warning: unreported exception " + 
+                    rawWarning((int) diag.getPosition(), "warning: unreported exception " +
                           diag.getArgs()[0] + " not caught or declared to be thrown");
                 }
             } else {
@@ -125,4 +137,3 @@ public class Unchecked implements Plugin {
 
     @Override public String getName() { return "unchecked"; }
 }
-
