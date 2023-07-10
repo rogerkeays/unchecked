@@ -19,7 +19,7 @@ TEST_CLASSPATH=$JAR
 
 # directories containing jdks to test against, separated by spaces
 JDKS="$JAVA_HOME"
-#JDKS="$HOME/tools/jdk-*"
+[ $1 = "all" ] && JDKS="$HOME/tools/jdk-*"
 
 # compile and build jar
 # note: -source 8 is required to import com.sun.tools.javac.*
