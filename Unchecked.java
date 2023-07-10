@@ -51,7 +51,7 @@ public class Unchecked implements Plugin {
             Map singletons = (Map) getProtected(context, "ht");
             for (Object component : singletons.values()) {
                 try {
-                    setProtected(component, "log", log);
+                    if (component != null) setProtected(component, "log", log);
                 } catch (NoSuchFieldException e) {}
             }
         } catch (Exception e) {
