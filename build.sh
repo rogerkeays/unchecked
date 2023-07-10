@@ -42,10 +42,15 @@ for JDK in $JDKS; do
     "$JDK"/bin/java -cp target -enableassertions TestWarnings
     [ $? -eq 0 ] || exit 1
 done
-echo "\n----- press enter to run error test cases"; read x
+echo "\n----- press enter to run attr error test cases"; read x
 for JDK in $JDKS; do
     echo $JDK
-    "$JDK"/bin/javac -cp $TEST_CLASSPATH -d target "$PLUGIN" $TEST_OPTS TestErrors.java
+    "$JDK"/bin/javac -cp $TEST_CLASSPATH -d target "$PLUGIN" $TEST_OPTS TestAttrErrors.java
+done
+echo "\n----- press enter to run flow error test cases"; read x
+for JDK in $JDKS; do
+    echo $JDK
+    "$JDK"/bin/javac -cp $TEST_CLASSPATH -d target "$PLUGIN" $TEST_OPTS TestFlowErrors.java
 done
 
 # install using maven
