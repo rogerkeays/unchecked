@@ -100,7 +100,11 @@ Run your code like you always have:
 
     java Test
 
-To add the `nowarn` parameter, use this syntax:
+Or start a `jshell` session using `nowarn` to suppress warnings about checked exception:
+
+    $ jshell --class-path unchecked.jar -C-Xplugin:"unchecked nowarn" -J--add-opens=java.base/java.lang=ALL-UNNAMED
+
+Note, to add the `nowarn` parameter, use this syntax:
 
     -Xplugin:"unchecked nowarn"
 
@@ -178,16 +182,15 @@ To ensure backwards compatibility with existing code, *Unchecked* has been used 
   * [Tomcat](https://github.com/apache/tomcat)
   * [Hibernate](https://github.com/hibernate/hibernate-orm)
 
+*Unchecked* should play nice with other `javac` plugins. It works with Lombok and [Fluent](https://github.com/rogerkeays/fluent), at least.
+
 ## IDE Support
 
 There is currently no IDE support for *Unchecked*. Contributions are welcome. Other projects such as Lombok and Manifold have the same feature, so you may be able to use their plugins.
 
 ## Known Issues
 
-  * *Unchecked* may not be compatible with other `javac` plugins, although it works with Lombok and [Fluent](https://github.com/rogerkeays/fluent), at least.
-  * If you are using *Unchecked* with [Fluent](https://github.com/rogerkeays/fluent), we recommend you specify the `-Xplugin:unchecked` option first, as this is how it is tested.
-  * [JShell crashes using *Unchecked*](https://github.com/rogerkeays/unchecked/issues/2). As JShell snippets `throw Exception` anyway, you only have to handle exceptions inside lambdas and methods. Still annoying though.
-  * Shell variables like `OPTS=-Xplugin:"unchecked nowarn"` cause string expansion hell because of the quotes. It works if you quote `"$OPTS"`, but gets pretty nasty when you want to add more `OPTS`. The trick is to use two different variables: `javac "$PLUGIN" "$OPTS"`.
+  * Setting shell variables like `OPTS=-Xplugin:"unchecked nowarn"` cause string expansion hell because of the quotes. It works if you quote `"$OPTS"`, but gets pretty nasty when you want to add more `OPTS`. The trick is to use two different variables: `javac "$PLUGIN" "$OPTS"`.
 
 Please submit issues to the [github issue tracker](https://github.com/rogerkeays/unchecked/issues). Be sure to include the JDK version and build tools you are using. A snippet of the code causing the problem will help to reproduce the bug. Before submitting, please try a clean build of your project.
 
@@ -196,8 +199,8 @@ Please submit issues to the [github issue tracker](https://github.com/rogerkeays
   * [Kotlin](https://kotlinlang.org): a JVM language which supports extension methods out of the box.
   * [Lombok](https://github.com/projectlombok/lombok): the grand-daddy of `javac` hacks, with various tools for handling checked exceptions.
   * [Manifold](https://manifold.systems): a `javac` plugin with many features, including disabling checked exceptions.
-  * [Checked exception helper functions](https://github.com/rogerkeays/jamaica-core/blob/master/src/exceptions.java): for when you can't use a compiler plugin.
-  * [Fluent](https://github.com/rogerkeays/fluent): a similar compiler plugin to support static extension methods in Java.
+  * [Checked exception helper functions](https://github.com/rogerkeays/jamaica-core/blob/master/src/exceptions.java): band-aids for when you can't use *Unchecked* .
+  * [Fluent](https://github.com/rogerkeays/fluent): static extension methods for Java.
   * [More solutions looking for a problem](https://rogerkeays.com).
 
 ## Disclaimer
