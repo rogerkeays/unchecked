@@ -3,7 +3,7 @@
 # build configuration
 GROUP=jamaica
 NAME=unchecked
-VERSION=0.3.1
+VERSION=0.4.0
 TARGET=9
 
 PACKAGE=jamaica.unchecked
