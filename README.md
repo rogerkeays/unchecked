@@ -102,7 +102,7 @@ Run your code like you always have:
 
 Or start a `jshell` session using `nowarn` to suppress warnings about checked exception:
 
-    $ jshell --class-path unchecked.jar -C-Xplugin:"unchecked nowarn" -J--add-opens=java.base/java.lang=ALL-UNNAMED
+    jshell --class-path unchecked.jar -C-Xplugin:"unchecked nowarn" -J--add-opens=java.base/java.lang=ALL-UNNAMED
 
 Note, to add the `nowarn` parameter, use this syntax:
 
@@ -190,6 +190,7 @@ There is currently no IDE support for *Unchecked*. Contributions are welcome. Ot
 
 ## Known Issues
 
+  * If you are using *Unchecked* with [Fluent](https://github.com/rogerkeays/fluent), we recommend you specify the `-Xplugin:unchecked` option first, as this is how it is tested.
   * Setting shell variables like `OPTS=-Xplugin:"unchecked nowarn"` cause string expansion hell because of the quotes. It works if you quote `"$OPTS"`, but gets pretty nasty when you want to add more `OPTS`. The trick is to use two different variables: `javac "$PLUGIN" "$OPTS"`.
 
 Please submit issues to the [github issue tracker](https://github.com/rogerkeays/unchecked/issues). Be sure to include the JDK version and build tools you are using. A snippet of the code causing the problem will help to reproduce the bug. Before submitting, please try a clean build of your project.
