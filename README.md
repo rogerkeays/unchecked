@@ -113,14 +113,14 @@ Note, to add the `nowarn` parameter, use this syntax:
 *Unchecked* is not yet available on Maven Central, however you can install it locally like this:
 
     wget https://github.com/rogerkeays/unchecked/raw/main/unchecked.jar
-    mvn install:install-file -DgroupId=jamaica -DartifactId=unchecked -Dversion=0.2.0 -Dpackaging=jar -Dfile=unchecked.jar
+    mvn install:install-file -DgroupId=jamaica -DartifactId=unchecked -Dversion=0.4.0 -Dpackaging=jar -Dfile=unchecked.jar
     
 Next, add the dependency to your `pom.xml`:
 
     <dependency>
       <groupId>jamaica</groupId>
       <artifactId>unchecked</artifactId>
-      <version>0.2.0</version>
+      <version>0.4.0</version>
       <scope>compile</scope>
     </dependency>
 
