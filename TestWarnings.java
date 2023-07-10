@@ -75,6 +75,9 @@ public class TestWarnings {
     			return "hello " + name;
     		}
     	}.apply("world").equals("hello world");
+
+        // we don't handle this one, so it should still be displayed
+        Depr.deprecated();
     }
 
     private static int one() { return 1; }
@@ -86,3 +89,9 @@ public class TestWarnings {
         throw new Exception(); // no `throws Exception` necessary
     }
 }
+
+class Depr {
+    @Deprecated(forRemoval=true)
+    public static void deprecated() {}
+}
+
