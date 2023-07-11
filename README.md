@@ -186,7 +186,7 @@ To ensure backwards compatibility with existing code, *Unchecked* has been used 
 
 ## IDE Support
 
-There is currently no IDE support for *Unchecked*. Contributions are welcome. Other projects such as Lombok and Manifold have the same feature, so you may be able to use their plugins.
+There is currently no IDE support for *Unchecked*. Contributions are welcome. If you cannot contribute code, please consider [supporting us on Patreon](https://patreon.com/Jamaica440).
 
 ## Known Issues
 
@@ -197,6 +197,7 @@ Please submit issues to the [github issue tracker](https://github.com/rogerkeays
 
 ## Related Resources
 
+  * [Jamaica](http://patreon.org/Jamaica440): support us on Patreon 🍻.
   * [Kotlin](https://kotlinlang.org): a JVM language which supports extension methods out of the box.
   * [Lombok](https://github.com/projectlombok/lombok): the grand-daddy of `javac` hacks, with various tools for handling checked exceptions.
   * [Manifold](https://manifold.systems): a `javac` plugin with many features, including disabling checked exceptions.
