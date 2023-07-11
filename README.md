@@ -100,11 +100,11 @@ Run your code like you always have:
 
     java Test
 
-Or start a `jshell` session using `nowarn` to suppress warnings about checked exception:
+Or start a `jshell` session:
 
-    jshell --class-path unchecked.jar -C-Xplugin:"unchecked nowarn" -J--add-opens=java.base/java.lang=ALL-UNNAMED
+    jshell --class-path unchecked.jar -C-Xplugin:unchecked -J--add-opens=java.base/java.lang=ALL-UNNAMED
 
-Note, to add the `nowarn` parameter, use this syntax:
+Note, to suppress warnings about checked exceptions, add the `nowarn` parameter using this syntax:
 
     -Xplugin:"unchecked nowarn"
 
