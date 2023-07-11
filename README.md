@@ -197,12 +197,12 @@ Please submit issues to the [github issue tracker](https://github.com/rogerkeays
 
 ## Related Resources
 
-  * [Jamaica](http://patreon.org/Jamaica440): support us on Patreon 🍻.
+  * [Jamaica](https://patreon.com/Jamaica440): our project's Patreon page. If you find *Unchecked* useful, please support us 🍻.
+  * [Fluent](https://github.com/rogerkeays/fluent): static extension methods for Java (also part of Jamaica).
   * [Kotlin](https://kotlinlang.org): a JVM language which supports extension methods out of the box.
   * [Lombok](https://github.com/projectlombok/lombok): the grand-daddy of `javac` hacks, with various tools for handling checked exceptions.
   * [Manifold](https://manifold.systems): a `javac` plugin with many features, including disabling checked exceptions.
   * [Checked exception helper functions](https://github.com/rogerkeays/jamaica-core/blob/master/src/exceptions.java): band-aids for when you can't use *Unchecked* .
-  * [Fluent](https://github.com/rogerkeays/fluent): static extension methods for Java.
   * [More solutions looking for a problem](https://rogerkeays.com).
 
 ## Disclaimer
