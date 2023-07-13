@@ -89,6 +89,25 @@ When you can't handle a checked exception, a common practise is to rethrow it as
 
 *Unchecked* is invoked as a compiler plugin and has no runtime dependencies. Warnings can be suppressed with the `nowarn` option.
 
+## Quick Start
+
+Download the jar, place it on your classpath, and run `javac` with `-Xplugin:unchecked` and `-J--add-opens=java.base/java.lang=ALL-UNNAMED`:
+
+    wget https://github.com/rogerkeays/unchecked/raw/main/unchecked.jar
+    javac -cp unchecked.jar -Xplugin:unchecked -J--add-opens=java.base/java.lang=ALL-UNNAMED Test.java
+
+Run your code like you always have:
+
+    java Test
+
+Or start a `jshell` session:
+
+    jshell --class-path unchecked.jar -C-Xplugin:unchecked -J--add-opens=java.base/java.lang=ALL-UNNAMED
+
+Note, to suppress warnings about checked exceptions, add the `nowarn` parameter using this syntax:
+
+    -Xplugin:"unchecked nowarn"
+
 ## Install Using Maven
 
 Add the following dependency to your `pom.xml`:
@@ -144,25 +163,6 @@ If your build is using an annotations processor, change the dependency tasks to:
         annotationProcessor 'io.github.rogerkeays:unchecked:0.4.1'
         testAnnotationProcessor 'io.github.rogerkeays:unchecked:0.4.1'
     }
-
-## Use From The Command Line
-
-Download the jar, place it on your classpath, and run `javac` with `-Xplugin:unchecked` and `-J--add-opens=java.base/java.lang=ALL-UNNAMED`:
-
-    wget https://github.com/rogerkeays/unchecked/raw/main/unchecked.jar
-    javac -cp unchecked.jar -Xplugin:unchecked -J--add-opens=java.base/java.lang=ALL-UNNAMED Test.java
-
-Run your code like you always have:
-
-    java Test
-
-Or start a `jshell` session:
-
-    jshell --class-path unchecked.jar -C-Xplugin:unchecked -J--add-opens=java.base/java.lang=ALL-UNNAMED
-
-Note, to suppress warnings about checked exceptions, add the `nowarn` parameter using this syntax:
-
-    -Xplugin:"unchecked nowarn"
 
 ## Build It Yourself
 
