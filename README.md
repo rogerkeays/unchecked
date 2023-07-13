@@ -113,7 +113,7 @@ Note, to suppress warnings about checked exceptions, add the `nowarn` parameter 
 Add the following dependency to your `pom.xml`:
 
     <dependency>
-      <groupId>jamaica</groupId>
+      <groupId>io.github.rogerkeays</groupId>
       <artifactId>unchecked</artifactId>
       <version>0.4.1</version>
       <scope>compile</scope>
