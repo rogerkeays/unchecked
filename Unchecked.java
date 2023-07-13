@@ -46,7 +46,7 @@ public class Unchecked implements Plugin {
             install(log);
         }
 
-        // convert checked exception errors to warnings, or suppress
+        // convert checked exception errors to warnings
         @Override
         public void report(JCDiagnostic diag) {
             if (diag.getCode().startsWith("compiler.err.unreported.exception")) {
