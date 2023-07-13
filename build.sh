@@ -18,7 +18,7 @@ use -all to test against all JDKs in \$HOME/tools
 # project configuration
 GROUP="io.github.rogerkeays"
 ARTIFACT="unchecked"
-VERSION="0.4.1"
+VERSION="0.4.2"
 DESCRIPTION="Say goodbye to checked exceptions forever"
 LICENSE="MIT License"
 DEVELOPER="Roger Keays"
