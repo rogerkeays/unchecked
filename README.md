@@ -143,6 +143,27 @@ To add the `nowarn` parameter, use this syntax (note: no quotation marks):
 
     <arg>-Xplugin:unchecked nowarn</arg>
 
+## Install Using Gradle
+
+Add the following to your `build.gradle`:
+
+    dependencies {
+        compileOnly 'io.github.rogerkeays:unchecked:0.4.1'
+        testCompileOnly 'io.github.rogerkeays:unchecked:0.4.1'
+    }
+    tasks.withType( JavaCompile ) {
+        options.compilerArgs += [ '-Xplugin:unchecked' ]
+        options.fork = true
+        options.forkOptions.jvmArgs += [ '--add-opens=java.base/java.lang=ALL-UNNAMED']
+    }
+
+If your build is using annotations, change the dependency tasks:
+
+    dependencies {
+        annotationProcessor 'io.github.rogerkeays:unchecked:0.4.1'
+        testAnnotationProcessor 'io.github.rogerkeays:unchecked:0.4.1'
+    }
+
 ## Build It Yourself
 
 *Unchecked* is built using a POSIX shell script:
