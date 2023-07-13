@@ -149,7 +149,7 @@ To add the `nowarn` parameter, use this syntax (note: no quotation marks):
 
     git clone https://github.com/rogerkeays/unchecked.git
     cd unchecked
-    ./build.sh
+    ./build.sh install
 
 ## JDK Support
 
