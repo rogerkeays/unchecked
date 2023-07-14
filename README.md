@@ -222,7 +222,7 @@ Language design can be a divisive topic. Some interesting threads on checked exc
 
 ## Related Resources
 
-  * [Jamaica](https://patreon.com/Jamaica440): our project's Patreon page. If you use *Unchecked*, please support us 🍻.
+  * [Jamaica](https://patreon.com/Jamaica440): our project's Patreon page, where you can fund further development.
   * [Fluent](https://github.com/rogerkeays/fluent): static extension methods for Java (also part of Jamaica).
   * [Kotlin](https://kotlinlang.org): a JVM language which supports extension methods out of the box.
   * [Lombok](https://github.com/projectlombok/lombok): the grand-daddy of `javac` hacks, with various tools for handling checked exceptions.
