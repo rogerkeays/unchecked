@@ -221,6 +221,15 @@ Please submit issues to the [github issue tracker](https://github.com/rogerkeays
   * [Checked exception helper functions](https://github.com/rogerkeays/jamaica-core/blob/master/src/exceptions.java): band-aids for when you can't use *Unchecked* .
   * [More solutions looking for a problem](https://rogerkeays.com).
 
+## Discussions
+
+Language design can be a divisive topic. Some interesting threads on checked exceptions and error handling can be found here:
+
+  * [Why doesn't C# support checked exceptions?](https://www.artima.com/articles/the-trouble-with-checked-exceptions)
+  * [Checked Exceptions on Wikipedia](https://en.wikipedia.org/wiki/Exception_handling#Checked_exceptions)
+  * [Unchecked post on hackernews](https://news.ycombinator.com/item?id=36708759)
+  * [Unchecked post on reddit](https://www.reddit.com/r/java/comments/14yky3n/unchecked_java_say_goodbye_to_checked_exceptions/)
+
 ## Disclaimer
 
   * *Unchecked* is not supported or endorsed by the OpenJDK team.
