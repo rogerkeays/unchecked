@@ -120,9 +120,7 @@ And configure the compiler plugin:
 
 Note, older versions of the compiler plugin use a different syntax. Refer to the [Maven Compiler Plugin docs](https://maven.apache.org/plugins/maven-compiler-plugin/compile-mojo.html) for more details. Make sure you add the `<fork>true</fork>` option too.
 
-To add the `nowarn` parameter, use this syntax:
-
-    <arg>-Xplugin:unchecked nowarn</arg>
+To add the `nowarn` parameter, use `<arg>-Xplugin:unchecked nowarn</arg>`.
 
 ## Install Using Gradle
 
