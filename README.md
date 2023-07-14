@@ -202,7 +202,7 @@ To ensure backwards compatibility with existing code, *Unchecked* has been used 
 
 ## IDE Support
 
-There is currently no IDE support for *Unchecked*. Contributions are welcome. If you cannot contribute code, please consider [supporting us on Patreon](https://patreon.com/Jamaica440).
+There is currently no IDE support for *Unchecked*. Contributions are welcome. If you cannot contribute code, please consider [funding this feature on Patreon](https://patreon.com/Jamaica440).
 
 ## Known Issues
 
