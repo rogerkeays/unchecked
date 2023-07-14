@@ -29,7 +29,7 @@ EMAIL="realguybrush@vivaldi.net"
 TARGET=9
 PACKAGE="jamaica.unchecked"
 CLASSNAME="Unchecked"
-JAR="$ARTIFACT.jar"
+JAR="target/$ARTIFACT.jar"
 PLUGIN="-Xplugin:unchecked"
 #PLUGIN=-Xplugin:"unchecked nowarn"
 TEST_OPTS="-J--add-opens=java.base/java.lang=ALL-UNNAMED "

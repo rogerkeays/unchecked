@@ -147,8 +147,8 @@ If your build is using an annotations processor, change the dependency tasks to:
 
 Download the jar, place it on your classpath, and run `javac` with `-Xplugin:unchecked` and `-J--add-opens=java.base/java.lang=ALL-UNNAMED`:
 
-    wget https://github.com/rogerkeays/unchecked/raw/main/unchecked.jar
-    javac -cp unchecked.jar -Xplugin:unchecked -J--add-opens=java.base/java.lang=ALL-UNNAMED Test.java
+    wget https://repo.maven.apache.org/maven2/io/github/rogerkeays/unchecked/0.4.1/unchecked-0.4.1.jar
+    javac -cp unchecked-0.4.1.jar -Xplugin:unchecked -J--add-opens=java.base/java.lang=ALL-UNNAMED Test.java
 
 Run your code like you always have:
 
@@ -156,7 +156,7 @@ Run your code like you always have:
 
 Or start a `jshell` session:
 
-    jshell --class-path unchecked.jar -C-Xplugin:unchecked -J--add-opens=java.base/java.lang=ALL-UNNAMED
+    jshell --class-path unchecked-0.4.1.jar -C-Xplugin:unchecked -J--add-opens=java.base/java.lang=ALL-UNNAMED
 
 Note, to suppress warnings about checked exceptions, add the `nowarn` parameter using this syntax:
 
