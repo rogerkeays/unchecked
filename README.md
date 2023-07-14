@@ -226,7 +226,7 @@ Language design can be a divisive topic. Some interesting threads on checked exc
   * [Lombok](https://github.com/projectlombok/lombok): the grand-daddy of `javac` hacks, with various tools for handling checked exceptions.
   * [Manifold](https://manifold.systems): a `javac` plugin with many features, including disabling checked exceptions.
   * [Checked exception helper functions](https://github.com/rogerkeays/jamaica-core/blob/master/src/exceptions.java): band-aids for when you can't use *Unchecked* .
-  * [More solutions looking for a problem](https://rogerkeays.com).
+  * [More stuff you never knew you wanted](https://rogerkeays.com).
 
 ## Disclaimer
 
