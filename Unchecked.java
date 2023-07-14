@@ -54,7 +54,7 @@ public class Unchecked implements Plugin {
                     log.rawWarning((int) diag.getPosition(), "warning: unreported exception " +
                           diag.getArgs()[0] + " not caught or declared to be thrown");
                 }
-            } else {
+            } else if (!diag.getCode().equals("compiler.err.except.never.thrown.in.try")) {
                 prev.report(diag);
             }
         }

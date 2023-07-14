@@ -78,6 +78,18 @@ public class TestWarnings {
 
         // we don't handle this one, so it should still be displayed
         Depr.deprecated();
+
+        // we should to be able to catch undeclared checked exceptions
+        try {
+        } catch (IOException e) {}
+
+        try {
+            ioException();
+            assert false;
+        } catch (IOException e) {
+            assert true;
+        }
+
     }
 
     private static int one() { return 1; }
@@ -87,6 +99,9 @@ public class TestWarnings {
     }
     private static void undeclaredException() {
         throw new Exception(); // no `throws Exception` necessary
+    }
+    private static void ioException() {
+        throw new IOException();
     }
 }
 
