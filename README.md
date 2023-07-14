@@ -96,7 +96,7 @@ Add the following dependency to your `pom.xml`:
     <dependency>
       <groupId>io.github.rogerkeays</groupId>
       <artifactId>unchecked</artifactId>
-      <version>0.4.1</version>
+      <version>0.4.2</version>
       <scope>compile</scope>
     </dependency>
 
@@ -127,8 +127,8 @@ To add the `nowarn` parameter, use `<arg>-Xplugin:unchecked nowarn</arg>`.
 Add the following to your `build.gradle`:
 
     dependencies {
-        compileOnly 'io.github.rogerkeays:unchecked:0.4.1'
-        testCompileOnly 'io.github.rogerkeays:unchecked:0.4.1'
+        compileOnly 'io.github.rogerkeays:unchecked:0.4.2'
+        testCompileOnly 'io.github.rogerkeays:unchecked:0.4.2'
     }
     tasks.withType( JavaCompile ) {
         options.compilerArgs += [ '-Xplugin:unchecked' ]
@@ -139,16 +139,16 @@ Add the following to your `build.gradle`:
 If your build is using an annotations processor, change the dependency tasks to:
 
     dependencies {
-        annotationProcessor 'io.github.rogerkeays:unchecked:0.4.1'
-        testAnnotationProcessor 'io.github.rogerkeays:unchecked:0.4.1'
+        annotationProcessor 'io.github.rogerkeays:unchecked:0.4.2'
+        testAnnotationProcessor 'io.github.rogerkeays:unchecked:0.4.2'
     }
 
 ## Install Manually
 
 Download the jar, place it on your classpath, and run `javac` with `-Xplugin:unchecked` and `-J--add-opens=java.base/java.lang=ALL-UNNAMED`:
 
-    wget https://repo.maven.apache.org/maven2/io/github/rogerkeays/unchecked/0.4.1/unchecked-0.4.1.jar
-    javac -cp unchecked-0.4.1.jar -Xplugin:unchecked -J--add-opens=java.base/java.lang=ALL-UNNAMED Test.java
+    wget https://repo.maven.apache.org/maven2/io/github/rogerkeays/unchecked/0.4.2/unchecked-0.4.2.jar
+    javac -cp unchecked-0.4.2.jar -Xplugin:unchecked -J--add-opens=java.base/java.lang=ALL-UNNAMED Test.java
 
 Run your code like you always have:
 
@@ -156,7 +156,7 @@ Run your code like you always have:
 
 Or start a `jshell` session:
 
-    jshell --class-path unchecked-0.4.1.jar -C-Xplugin:unchecked -J--add-opens=java.base/java.lang=ALL-UNNAMED
+    jshell --class-path unchecked-0.4.2.jar -C-Xplugin:unchecked -J--add-opens=java.base/java.lang=ALL-UNNAMED
 
 Note, to suppress warnings about checked exceptions, add the `nowarn` parameter using this syntax:
 
