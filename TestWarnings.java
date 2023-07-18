@@ -103,6 +103,12 @@ public class TestWarnings {
     private static void ioException() {
         throw new IOException();
     }
+    private static void declaredRuntimeException() throws RuntimeException { // valid java
+        throw new RuntimeException();
+    }
+    private static void undeclaredRuntimeException() { // valid java
+        throw new RuntimeException();
+    }
 }
 
 class Depr {
