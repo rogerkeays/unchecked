@@ -7,6 +7,7 @@ valid actions:
   clean
   compile
   jar
+  test-valid     run tests on standard java code with no warnings or errors
   test-warnings  run tests expected to show warnings
   test-errors    run tests expected to show errors
   test           run all tests
@@ -60,6 +61,15 @@ mkdir -p target/META-INF/services
 echo "$PACKAGE.$CLASSNAME" > target/META-INF/services/com.sun.source.util.Plugin
 cd target; $JAVA_HOME/bin/jar -cf ../$JAR *; cd ..
 [ $1 = "jar" ] && exit 0
+
+for JDK in $JDKS; do
+    echo ">>> test-valid ($JDK)"
+    "$JDK"/bin/javac -cp $TEST_CLASSPATH -d target "$PLUGIN" $TEST_OPTS TestValid.java
+    [ $? -eq 0 ] || exit 1
+    "$JDK"/bin/java -cp target -enableassertions TestValid
+    [ $? -eq 0 ] || exit 1
+done
+[ $1 = "test-valid" ] && exit 0
 
 for JDK in $JDKS; do
     echo ">>> test-warnings ($JDK)"
