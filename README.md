@@ -202,8 +202,6 @@ To ensure backwards compatibility with existing code, *Unchecked* has been used 
 
 There is currently no IDE support for *Unchecked*. Contributions are welcome. If you cannot contribute code, please consider [funding this feature on Patreon](https://patreon.com/Jamaica440).
 
-Intellij users can also follow [this proposal to allow disabling of checked exceptions](https://youtrack.jetbrains.com/issue/IDEA-325616/Support-Java-checked-exceptions-as-unchecked-exception-feature-improve-compatibility-with-Kotlin).
-
 ## Known Issues
 
   * If you are using *Unchecked* with [Fluent](https://github.com/rogerkeays/fluent), we recommend you specify the `-Xplugin:unchecked` option first, as this is how it is tested. You will also need at least JDK 11 or newer.
